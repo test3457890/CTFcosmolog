@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  twitter-clone:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./database.sqlite:/app/database.sqlite
+      - ./public:/app/public
+    restart: unless-stopped

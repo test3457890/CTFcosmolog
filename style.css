@@ -1,0 +1,40 @@
+body { font-family: Arial, sans-serif; background-color: #f5f8fa; margin: 0; padding: 20px; }
+.container { max-width: 600px; margin: 0 auto; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.logout-btn { padding: 5px 10px; background: #e0245e; color: white; border: none; border-radius: 5px; cursor: pointer; }
+.post-form { background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.post-form textarea { width: 100%; height: 80px; padding: 10px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 5px; resize: none; }
+.post { background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.post-header { margin-bottom: 10px; color: #657786; }
+.challenge-hint { background: #e8f4fd; border-left: 4px solid #1da1f2; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+.challenge-hint h3 { color: #1da1f2; margin-bottom: 10px; }
+.challenge-hint p { margin: 5px 0; color: #333; }
+.post-options { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.private-post { background: #fff3e0; border-left: 3px solid #ff9800; }
+.private-badge { display: inline-block; background: #ff9800; color: white; padding: 2px 8px; border-radius: 3px; font-size: 12px; margin-top: 5px; }
+.search-section { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.search-section input { width: 70%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-right: 10px; }
+.search-btn, .post-btn { padding: 10px 20px; background: #1da1f2; color: white; border: none; border-radius: 5px; cursor: pointer; }
+.search-btn:hover, .post-btn:hover { background: #1a91da; }
+.search-results { margin-top: 15px; }
+.search-result { padding: 10px; border: 1px solid #eee; margin: 5px 0; border-radius: 5px; cursor: pointer; transition: background 0.2s; }
+.search-result:hover { background: #f5f5f5; }
+.user-profile { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.profile-header { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #1da1f2; }
+.profile-header h4 { color: #1da1f2; font-size: 20px; margin-bottom: 5px; }
+.header-right { display: flex; align-items: center; gap: 15px; }
+.header-right span { color: #1da1f2; }
+.timeline { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.timeline h3 { margin-top: 0; color: #333; }
+.file-input { margin-top: 10px; margin-bottom: 10px; display: block; width: 100%; }
+.post-image { max-width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid #ddd; }
+
+body.dark-mode { background-color: #15202b; color: #ffffff; }
+.dark-mode .post-form, .dark-mode .post, .dark-mode .search-section, .dark-mode .user-profile, .dark-mode .timeline { background: #192734; border: 1px solid #38444d; box-shadow: none; }
+.dark-mode .post-header, .dark-mode h3 { color: #8899a6; }
+.dark-mode textarea, .dark-mode input[type="text"], .dark-mode input[type="password"] { background: #22303c; color: white; border-color: #38444d; }
+.dark-mode .challenge-hint { background: #1c2732; border-left-color: #1da1f2; }
+.dark-mode .challenge-hint p { color: #ccc; }
+.dark-mode .private-post { background: #2d2315; border-left-color: #ff9800; }
+.dark-mode .search-result { border-color: #38444d; }
+.dark-mode .search-result:hover { background: #22303c; }
