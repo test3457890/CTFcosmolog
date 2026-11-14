@@ -217,7 +217,7 @@ The seven core exercises still total 1,550 points. Four optional investigations 
 
 ### Home and profiles
 
-Home has For you and Following feeds. Twelve profiles and 84 additional story posts provide context. Like, reply, follow, bookmark, or open a timestamp to view a post conversation. Initials avatars avoid missing profile image dependencies.
+Home has For you and Following feeds. Twelve profiles and 91 additional story posts provide context. Like, reply, follow, bookmark, or open a timestamp to view a post conversation. Initials avatars avoid missing profile image dependencies.
 
 ### Explore and private accounts
 
@@ -240,3 +240,34 @@ All social state and submissions reset when the server restarts. Progress follow
 Confirm /api/health reports seven core challenges, 1,550 core points, and four optional missions. Verify a reply, a bookmark, a member message, and a flag submission. A duplicate core flag must not add points twice. After a restart, profiles retain stable IDs and social activity returns to the scenario seed.
 
 The core stego JPEG is included and verified. The facility.svg attachment belongs to a separate optional metadata exercise. Basic startup remains touch database.sqlite followed by docker-compose up -d.
+
+## Forensic case operations
+
+Seven new offline forensic cases are available in Case files and the Forensics tab of Mission journal. They add a separate completion track for traffic analysis, metadata, database recovery, deleted files, email, and timeline correlation. The original seven challenges still total 1,550 points; these seven cases and the four existing side investigations award zero points.
+
+### Prepare student workstations
+
+Students need an archive viewer, Wireshark or TShark, ExifTool, DB Browser for SQLite or sqlite3, and Autopsy or The Sleuth Kit. A text editor and Python or a spreadsheet support decoding and timeline work. These tools analyze supplied files; students do not need live capture privileges or access to another network. Install tools before the session using their official distributions. The application container needs no new runtime dependencies.
+
+On an Ubuntu analysis workstation, an organizer may install command line tools using the following command. Package availability depends on the distribution. Students may instead use the graphical tools on their own supported operating system.
+
+```text
+sudo apt-get update
+sudo apt-get install -y tshark libimage-exiftool-perl sqlite3 sleuthkit unzip python3
+```
+
+### Verify the acquisitions
+
+Open Case files and download all seven acquisitions. Compare SHA-256 against the value displayed for each file. Keep an untouched original, extract a working copy, and record the source and recovery steps. Confirm both packet captures open in Wireshark, both photo versions are present, the SQLite archive includes its WAL, and the disk image is readable by the forensic tool.
+
+The automated Forensic evidence validation workflow solves the shipped acquisitions using TShark, ExifTool, SQLite, The Sleuth Kit, MIME parsing, and UTC correlation. Run python3 tests/forensics.py on a workstation with those tools installed. The browser workflow also checks case downloads, hashes, progressive hints, separate completion, and mobile layout.
+
+### Run the learning sequence
+
+Start with HTTP object recovery, then DNS reconstruction and metadata. Database and deleted-file recovery introduce preserved acquisition state. Finish with email corroboration and the three-clock timeline. Ask students to identify the relevant post or message, name their tool, and explain their evidence before opening another hint. The app accepts flags; staff should review the method as well.
+
+Case files link back to #CaseFiles acquisition conversations. The Maintenance crew conversation identifies accepted receipt R-314; R-271 was cancelled. Do not turn a cancelled receipt or a successful drill into an unexplained dead end. Both have supplied records explaining their status.
+
+### Scope and resets
+
+The evidence is fictional and contains documentation IP addresses and .test domains. No exploit execution or live traffic collection is needed for these cases. Case files are public downloads. Application progress still follows the active JWT account and resets on restart. The single deliberately vulnerable server and public source permit answer shortcuts; this remains a teaching lab rather than an isolated competition platform.

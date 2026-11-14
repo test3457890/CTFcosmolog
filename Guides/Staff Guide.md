@@ -456,3 +456,242 @@ Only the seven core missions award points. Optional flags mark story completion.
 ### Regression checks
 
 Run node tests/regression.cjs with Node.js 18 or newer and installed project dependencies. The tests now cover the 12 seeded accounts, social interactions, private-post visibility, ordinary inbox scoping, the intentional IDOR read, denied nonmember writes, metadata and encoded evidence, and duplicate-score protection. The six code-based core solutions continue to pass. Docker startup and shipped-JPEG extraction are now automated validation checks. The event host should still run the readiness procedure against its own environment.
+
+## Offline forensic investigations
+
+These seven cases extend Nova’s investigation of the evil.esAI incident. They record completion separately and award zero points, preserving the original 1,550-point core score. Find acquisition posts under #CaseFiles, obtain originals from Case files, and work on copies. The existing four side investigations remain available.
+
+Each case has three progressively more specific hints in Mission journal. Evidence includes ordinary transfers, retries, previews, cancelled receipts, and drills. Resolve those alternatives from the records rather than treating every unusual item as a flag.
+
+## Forensic case 1 The missing transfer
+
+Intermediate | Separate completion | 0 points
+
+Recover the accepted maintenance receipt from an HTTP capture. Several objects crossed the link; match the receipt against the crew conversation.
+
+### Tools and evidence
+
+Wireshark or TShark; ZIP viewer. Download relay-transfer.pcap from Case files. Maintenance crew in Messages names the accepted receipt. Search #CaseFiles for the original acquisition posts.
+
+### Hints in order
+
+1. Filter for HTTP and inspect request paths and responses.
+
+2. Follow a TCP stream or use File > Export Objects > HTTP. A ZIP object may span several packets.
+
+3. Export handover-314.zip, open receipt.json, and compare its receipt and status with the crew record.
+
+### Verification method
+
+```text
+tshark -r relay-transfer.pcap --export-objects http,http-export
+# Open http-export/handover-314.zip and receipt.json.
+# Confirm receipt R-314 and status accepted before reading proof.
+```
+
+Flag: AstroSec{http_object_recovered}
+
+Require the student to show the source evidence and explain why the alternative records do not satisfy the case. Submit this flag under the matching forensic case in Mission journal. Completion must not change the core score, and repeat submissions must remain idempotent.
+
+## Forensic case 2 The quiet resolver
+
+Intermediate | Separate completion | 0 points
+
+Reconstruct a record sent through unusual DNS questions. Separate ordinary station lookups, remove retries, and use the sequence labels.
+
+### Tools and evidence
+
+Wireshark or TShark; hex decoder. Download resolver-window.pcap from Case files. relay_watch describes a resolver window under #CaseFiles. Query order alone is unreliable.
+
+### Hints in order
+
+1. Inspect DNS query names, not just destination addresses.
+
+2. Keep questions ending in cache.telemetry.test. Their first label is a sequence number; the next is hexadecimal.
+
+3. Use query packets only, remove the repeated sequence 02, sort 01 through 04, concatenate the second labels, then decode hex to text.
+
+### Verification method
+
+```text
+tshark -r resolver-window.pcap -Y 'dns.flags.response == 0' -T fields -e dns.qry.name
+# Keep cache.telemetry.test questions; remove duplicate sequence 02.
+# Sort 01,02,03,04. Join the hex labels, then decode:
+python3 -c "print(bytes.fromhex(input()).decode())"
+```
+
+Flag: AstroSec{dns_fragments_reassembled}
+
+Require the student to show the source evidence and explain why the alternative records do not satisfy the case. Submit this flag under the matching forensic case in Mission journal. Completion must not change the core score, and repeat submissions must remain idempotent.
+
+## Forensic case 3 The original frame
+
+Intermediate | Separate completion | 0 points
+
+Compare a resized feed preview with its original survey photo. Recover the original annotation without relying on what the picture visibly shows.
+
+### Tools and evidence
+
+ExifTool; archive viewer; Base64 decoder. Download survey-photos.zip from Case files. patch_notes posted the CAM-17 survey under #CaseFiles.
+
+### Hints in order
+
+1. Extract both JPEGs and compare their metadata.
+
+2. Run exiftool on the original. The survey annotation is a UserComment; the preview has had metadata removed.
+
+3. The UserComment is Base64 text. Decode it locally. The original image contains no real location data.
+
+### Verification method
+
+```text
+unzip survey-photos.zip -d survey-work
+exiftool survey-work/original-cam17.jpg
+exiftool -UserComment -s3 survey-work/original-cam17.jpg
+# Decode the resulting Base64 annotation locally.
+```
+
+Flag: AstroSec{original_photo_verified}
+
+Require the student to show the source evidence and explain why the alternative records do not satisfy the case. Submit this flag under the matching forensic case in Mission journal. Completion must not change the core score, and repeat submissions must remain idempotent.
+
+## Forensic case 4 The incomplete checkpoint
+
+Advanced | Separate completion | 0 points
+
+An acquired database appears to show only a cancelled handoff. Determine whether its accompanying files preserve a newer committed record.
+
+### Tools and evidence
+
+DB Browser for SQLite or sqlite3. Download handoff-snapshot.zip from Case files. signal_archive explains the workstation acquisition under #CaseFiles. Preserve the original archive and examine a copy.
+
+### Hints in order
+
+1. A SQLite acquisition can include more than the main database file.
+
+2. Keep handoff.sqlite and handoff.sqlite-wal together with those exact names in a writable working directory. Open the database normally on a copy.
+
+3. Query SELECT receipt,status,proof FROM handoffs WHERE receipt='R-314' AND status='accepted';. A baseline-only copy lacks that row.
+
+### Verification method
+
+```text
+unzip handoff-snapshot.zip -d handoff-work
+sqlite3 handoff-work/handoff.sqlite "SELECT receipt,status,proof FROM handoffs WHERE receipt='R-314' AND status='accepted';"
+# Keep handoff.sqlite-wal alongside handoff.sqlite.
+# Open only the working copy; SQLite may checkpoint its WAL.
+```
+
+Flag: AstroSec{wal_handoff_restored}
+
+Require the student to show the source evidence and explain why the alternative records do not satisfy the case. Submit this flag under the matching forensic case in Mission journal. Completion must not change the core score, and repeat submissions must remain idempotent.
+
+## Forensic case 5 The removed handoff
+
+Advanced | Separate completion | 0 points
+
+Recover the removed handoff from a raw removable-media image. A normal file listing is insufficient; preserve deleted-entry evidence.
+
+### Tools and evidence
+
+Autopsy or The Sleuth Kit. Download removable-media.zip from Case files. The media acquisition post is under #CaseFiles. The acquisition note identifies the filesystem layout.
+
+### Hints in order
+
+1. Extract the image and add it as a disk image in a forensic tool, or inspect it with fls.
+
+2. This FAT12 image begins at byte zero and has no partition table. fls -d relay-usb.img lists deleted entries.
+
+3. Use the metadata address reported for _ANDOFF.TXT with icat -r relay-usb.img <address>. Do not assume the address from a different image.
+
+### Verification method
+
+```text
+unzip removable-media.zip -d media-work
+fls -d media-work/relay-usb.img
+icat -r media-work/relay-usb.img <metadata-address>
+# Use the address fls reports for _ANDOFF.TXT, not the name.
+```
+
+Flag: AstroSec{deleted_handoff_recovered}
+
+Require the student to show the source evidence and explain why the alternative records do not satisfy the case. Submit this flag under the matching forensic case in Mission journal. Completion must not change the core score, and repeat submissions must remain idempotent.
+
+## Forensic case 6 The accepted message
+
+Intermediate | Separate completion | 0 points
+
+Two exported messages claim the same receipt. Match the gateway record to a Message-ID and recover the accepted message attachment.
+
+### Tools and evidence
+
+Email viewer or Python email parser; text editor. Download mail-review.zip from Case files. mira_ops posted the gateway review bundle under #CaseFiles. A display name is not proof of origin.
+
+### Hints in order
+
+1. Compare gateway.log with the complete message headers. Opening the files does not require sending email.
+
+2. The ACCEPT event identifies handoff-314@station.test; the other message was dropped as a cancelled draft.
+
+3. Decode the accepted message's Base64 MIME attachment, receipt.csv, and read its proof column. These are fictional evidence headers, not a real authentication verdict.
+
+### Verification method
+
+```text
+unzip mail-review.zip -d mail-work
+# Match gateway.log ACCEPT to Message-ID, not the display name.
+# In an email viewer, open receipt-original.eml and save receipt.csv.
+# Or use Python's email parser to decode its MIME attachment.
+```
+
+Flag: AstroSec{mail_route_verified}
+
+Require the student to show the source evidence and explain why the alternative records do not satisfy the case. Submit this flag under the matching forensic case in Mission journal. Completion must not change the core score, and repeat submissions must remain idempotent.
+
+## Forensic case 7 The three clocks
+
+Advanced | Separate completion | 0 points
+
+Correlate operator, gateway, and relay records to identify the production uplink. Local timestamps use different offsets; tests and rejected requests are mixed in.
+
+### Tools and evidence
+
+Timeline Explorer, spreadsheet, or Python. Download incident-timeline.zip from Case files. Nova posted the timeline bundle under #CaseFiles. The included instructions define the exact answer format.
+
+### Hints in order
+
+1. Normalize each ISO timestamp to UTC before sorting. Sorting the displayed local times can produce the wrong order.
+
+2. Match request IDs across all three sources. Require HANDOFF_APPROVED, then AUTH_ACCEPTED, then UPLINK_ACCEPTED. Exclude TEST and REJECTED events.
+
+3. req-314 runs at 08:17:00Z, 08:17:01Z, and 08:17:04Z. Submit AstroSec{uplink_<session>_<relay>} using lowercase and removing identifier hyphens.
+
+### Verification method
+
+```text
+unzip incident-timeline.zip -d timeline-work
+# Parse ISO timestamps with offsets and convert all three sources to UTC.
+# Correlate req-314: approved 08:17:00Z, authenticated 08:17:01Z,
+# production uplink accepted 08:17:04Z, session sess-42, KRONOS-7.
+# Lowercase and remove identifier hyphens as instructions.txt specifies.
+```
+
+Flag: AstroSec{uplink_sess42_kronos7}
+
+Require the student to show the source evidence and explain why the alternative records do not satisfy the case. Submit this flag under the matching forensic case in Mission journal. Completion must not change the core score, and repeat submissions must remain idempotent.
+
+## Forensic reference sources
+
+Wireshark export objects and stream analysis: https://www.wireshark.org/docs/wsug_html_chunked/ChIOExportSection.html
+
+TShark command reference: https://www.wireshark.org/docs/man-pages/tshark.html
+
+SQLite write ahead logging: https://www.sqlite.org/wal.html
+
+ExifTool tag reference: https://exiftool.org/TagNames/EXIF.html
+
+The Sleuth Kit deleted file listing: https://www.sleuthkit.org/sleuthkit/man/fls.html
+
+The Sleuth Kit file recovery: https://www.sleuthkit.org/sleuthkit/man/icat.html
+
+Validation: tests/forensics.py extracts the HTTP object with TShark, reconstructs DNS query fragments, reads the original EXIF comment with ExifTool, contrasts baseline-only and WAL-complete SQLite copies, recovers the deleted FAT entry with fls and icat, parses the accepted MIME attachment, and correlates UTC timestamps. The evidence manifest checks all seven download hashes. No real capture or external endpoint is required.

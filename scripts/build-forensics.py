@@ -78,7 +78,7 @@ for offset in [512,5120]:disk[offset:offset+4608]=fat
 root=19*512;data_start=33*512
 live=b'CosmoLog removable media image. A handoff text file was removed before acquisition. Recover the deleted file, not this readme.\r\n';deleted=('Receipt R-314\r\nRecovered handoff proof: '+FLAGS['disk']+'\r\n').encode()
 def entry(name,cluster,size,deleted=False):
- e=bytearray(32);e[:11]=name;e[11]=0x20;struct.pack_into('<HHHHHI',e,22,8*2048,((2026-1980)<<9)|(11<<5)|13,cluster,0,0,0) if False else None
+ e=bytearray(32);e[:11]=name;e[11]=0x20
  struct.pack_into('<H',e,22,8<<11);struct.pack_into('<H',e,24,((2026-1980)<<9)|(11<<5)|13);struct.pack_into('<H',e,26,cluster);struct.pack_into('<I',e,28,size)
  if deleted:e[0]=0xe5
  return e

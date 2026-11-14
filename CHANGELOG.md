@@ -9,7 +9,7 @@ The attachment-based corrected project replaces the older GitHub upload. The sev
 | `server.js` | Apply the requested stable-ID, Bearer-token, and scoped SQLi fixes; wait for deterministic seeding before listening; load the community module; create the upload directory; prevent private posts on public accounts from leaking to other identities. Existing core challenge endpoints remain. |
 | `sqlite.js` | Promise wrappers for ordered SQLite initialization and social queries. |
 | `social.js` | Social feeds, reactions, reposts, author-only edits/pins, bookmarks, follows, replies, inboxes, membership-checked writes, notifications, optional conversation IDOR, and mission submission/progress. Social state is an unattached in-memory database. |
-| `story.js` | Eight additional fictional users, 84 story posts, 31 seeded replies, six ordinary inbox conversations, one restricted operations conversation, and resolvable red herrings. |
+| `story.js` | Eight additional fictional users, 91 story posts, 38 seeded replies, six ordinary inbox conversations, one restricted operations conversation, and resolvable red herrings. |
 | `public/index.html` | Social application shell with Home, Explore, Messages, Notifications, Bookmarks, Profile, Mission journal, and Station tools. |
 | `public/app.js` | Navigation, safe text rendering, forms, interactions, per-post links, challenge tools, flag submission, and theme control. |
 | `public/style.css` | Responsive social layout, light/dark themes, initials avatars, conversation and mission views, and keyboard focus states. |
@@ -55,3 +55,35 @@ Passed: JavaScript syntax, the expanded real-server regression suite, DOM intera
 | `README.md` | Update content counts and describe the new community conversations and audience expectations. |
 | `Guides/CosmoLog Setup Guide.docx` and `Guides/Setup.md` | Update the seeded post count to 84. Startup, challenge instructions, flags, and scoring are unchanged. |
 | `CHANGELOG.md` | Record the content expansion and every file changed for it. |
+
+## Seven forensic cases and evidence archive
+
+| File | Change and reason |
+|---|---|
+| `forensics.js` | Define seven server-side cases, tool recommendations, three progressive hints, and exact flags. New cases record completion for zero points. |
+| `social.js` | Include forensic cases in the journal, expose sanitized evidence metadata through /api/case-files, and report seven forensic cases in health without changing core scoring or the four side missions. |
+| `story.js` | Add seven acquisition posts, seven corroborating replies, and the accepted receipt reference in crew chat, tying evidence to the existing story. |
+| `public/index.html` | Add Case files navigation and the CaseFiles topic link. |
+| `public/app.js` | Add the evidence archive with download hashes and file sizes, attachment cards, journal filters, progressive hints, and separate forensic completion. |
+| `public/style.css` | Style evidence cards, hash disclosure, attachment cards, and journal filters for desktop/mobile and light/dark themes. |
+| `public/attachments/cases/relay-transfer.pcap` | Full TCP/HTTP acquisition with an accepted compressed object, cancelled receipt, and ordinary traffic. |
+| `public/attachments/cases/resolver-window.pcap` | DNS query/response acquisition with numbered hex fragments, retry traffic, and normal lookups. |
+| `public/attachments/cases/survey-photos.zip` | Original EXIF-bearing survey JPEG and metadata-stripped preview. |
+| `public/attachments/cases/handoff-snapshot.zip` | Baseline SQLite database plus committed WAL needed to see the accepted record. |
+| `public/attachments/cases/removable-media.zip` | Raw FAT12 filesystem image with a deleted entry and recoverable handoff content. |
+| `public/attachments/cases/mail-review.zip` | Accepted and cancelled MIME email exports plus a gateway disposition log. |
+| `public/attachments/cases/incident-timeline.zip` | Three timestamped sources, distinct UTC offsets, correlated identifiers, and an explicit answer format. |
+| `public/attachments/cases/manifest.json` | Record SHA-256 and byte counts for all seven acquisitions. |
+| `scripts/build-forensics.py` | Rebuild fictional offline evidence without live capture or application dependency changes. |
+| `tests/forensics.py` | Solve all seven shipped cases with real tools and check acquisition hashes. |
+| `.github/workflows/forensics.yml` | Install analysis tooling in CI and run the forensic evidence validation separately from the app. |
+| `tests/regression.cjs` | Verify 18 journal entries, seven served evidence hashes, hidden answer fields, correct/wrong forensic submissions, and unchanged/idempotent 1,550-point core scoring. |
+| `tests/browser.cjs` | Verify desktop/mobile Case files, downloads, hashes, filtered cases, progressive hints, and separate completion. Capture new screens. |
+| `.dockerignore` | Include forensic ZIP acquisitions in the application image despite the general ZIP exclusion. |
+| `README.md` | Describe the seven cases, audience, tools, evidence handling, separate completion, validation, and updated content counts. |
+| `Guides/CosmoLog Setup Guide.docx` and `Guides/Setup.md` | Add analysis workstation preparation, acquisition readiness checks, learning sequence, limitations, and updated seed counts. |
+| `Guides/CosmoLog Hint Book.docx` and `Guides/Hint Book.md` | Add seven matching cases with progressive hints, final methods, and reference sources. |
+| `Guides/CosmoLog Staff Guide.docx` and `Guides/Staff Guide.md` | Add all seven answers and tested recovery methods, judging expectations, evidence checks, and reference sources. |
+| `CHANGELOG.md` | Record every file changed for this expansion. |
+
+Validation passed on the evidence/app commit: real-server regression, Docker startup and HTTP-served stego extraction, all seven forensic solutions with the intended tools, and desktop/mobile Chromium flows. Original core flags, points, dependency versions, and startup commands remain unchanged.

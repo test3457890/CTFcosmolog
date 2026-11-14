@@ -2,3 +2,5 @@
 
 /* Evidence archive uses the same restrained community surfaces. */
 .case-card{margin:20px 28px;padding:24px;border:1px solid var(--line);border-radius:14px;min-width:0}.case-card h2{margin:8px 0 12px}.case-card p{line-height:1.6}.file-name{overflow-wrap:anywhere}.evidence-hash{margin:14px 0;color:var(--muted)}.evidence-hash code{display:block;overflow-wrap:anywhere;margin:12px 0;font-size:12px}.download-link{display:inline-block;text-decoration:none;padding:10px 16px;border-radius:8px}.post-attachment{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;margin-top:16px;padding:16px;border:1px solid var(--line);border-radius:12px}.post-attachment small{grid-column:2}.file-kind{grid-row:span 2;align-self:center;font-size:11px;letter-spacing:.08em;padding:10px;background:var(--soft);border-radius:6px}.case-lead{border-left:3px solid var(--accent);padding-left:12px}.mission>.text-link{display:inline-block;margin:0 14px 14px 0}.mission-tabs{position:sticky;top:0;background:var(--surface);z-index:2}.case-card .row{flex-wrap:wrap}@media(max-width:700px){.case-card{margin:16px;padding:18px}.mission-tabs button{padding:12px 8px}}
+
+.mission{scroll-margin-top:60px}

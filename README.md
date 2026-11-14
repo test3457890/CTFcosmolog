@@ -27,7 +27,7 @@ Use an authorized training VM/network. The core command execution and file trave
 
 - Home feed with For you and Following tabs.
 - Twelve fictional profiles with bios, initials avatars, and follower counts.
-- Eighty-four additional story posts, 31 seeded replies, and ordinary life alongside incident clues.
+- Ninety-one additional story posts, 38 seeded replies, and ordinary life alongside incident clues.
 - Likes, reposts, threaded replies, bookmarks, follows, individual post links, author-only editing, and pinned posts.
 - Six normal inbox conversations for each student account, plus a restricted operations thread that supports an optional IDOR exercise.
 - Message replies and linked notifications, a persistent light/dark preference, and responsive layouts.
@@ -82,6 +82,32 @@ The expanded community adds 48 ordinary posts and 24 replies across the eight fi
 
 Content is intended for student audiences: respectful humor, no real political positions or public figures, and no graphic violence, sexual content, substance use, or gambling. The new everyday conversations contain no flags and add no scored tasks. The original seven challenges still total 1,550 points, with four existing unscored investigations.
 
+## Seven offline forensic cases
+
+Open Case files for original evidence, file sizes, and SHA-256 hashes. Follow #CaseFiles posts and the Maintenance crew conversation to understand each acquisition. Mission journal has Core, Forensics, and Side stories tabs; forensic cases offer three progressive hints. Preserve the original downloads and analyze copies with local tools. No live network capture is required.
+
+| Case | Tools | What students must demonstrate |
+|---|---|---|
+| The missing transfer | Wireshark or TShark; archive viewer | Reassemble/export an HTTP object and distinguish the accepted receipt from a cancelled transfer. |
+| The quiet resolver | Wireshark or TShark; hex decoder | Filter DNS questions, remove retries, reorder numbered fragments, and decode a record. |
+| The original frame | ExifTool; Base64 decoder | Compare original and preview metadata and recover an encoded survey annotation. |
+| The incomplete checkpoint | DB Browser for SQLite or sqlite3 | Preserve a WAL sidecar and recover committed state absent from a baseline-only database. |
+| The removed handoff | Autopsy or The Sleuth Kit | Identify a deleted FAT12 entry and recover its content from a raw disk image. |
+| The accepted message | Email viewer or Python email parser | Correlate Message-ID with a gateway disposition and decode the correct MIME attachment. |
+| The three clocks | Timeline Explorer, spreadsheet, or Python | Normalize timestamp offsets, correlate request/session IDs, and exclude rejected events and drills. |
+
+These seven cases form a separate unscored completion track. The original seven core exercises retain their flags and 1,550-point total, and the four earlier side investigations remain available. There are 18 journal entries in total. The evidence uses fictional records, documentation IP addresses, and .test domains. Student analysis tools are installed separately; the application dependencies and startup commands are unchanged.
+
+Harder cases require corroboration or reconstruction, rather than obscure passwords. The accepted receipt is R-314, identified in crew chat. A cancelled receipt, stripped preview, database checkpoint, and successful drill each have evidence explaining why they are insufficient. Source inspection and the app's intentional command execution can still bypass the intended learning paths; staff should ask students to explain their method.
+
+`public/attachments/cases/manifest.json` records evidence hashes. `scripts/build-forensics.py` rebuilds the fictional acquisitions using Python and Pillow; rebuilding is an organizer task and can change acquisition bytes and hashes. Ship and verify the manifest with its corresponding artifacts. The application never generates evidence during startup.
+
+The Forensic evidence validation workflow solves the shipped files using real tools. To run it on an analysis workstation with TShark, ExifTool, The Sleuth Kit, and Python installed:
+
+```sh
+python3 tests/forensics.py
+```
+
 ## Stable identities and resets
 
 | ID | Username |
@@ -122,6 +148,8 @@ In the five-column UNION result, post content maps to `username`. Search Results
 The new social state resides in another in-memory SQLite database, not attached to the vulnerable search snapshot. This limits the SQLi exercise, but does not isolate the single application process from its intentional command execution or file traversal. Source inspection and cross-challenge shortcuts remain possible. Separate services or instances would be needed for stronger challenge independence.
 
 ## Guides
+
+All three guides now include the seven forensic cases: setup and acquisition handling, progressive hints, and staff recovery methods.
 
 - [Setup Guide](Guides/Setup.md): Docker preparation, normal startup, shipped-image verification and recovery, readiness checks, navigation, resets, troubleshooting.
 - [Hint Book](Guides/Hint%20Book.md): the seven original exercises and four optional investigations.
