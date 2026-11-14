@@ -68,7 +68,7 @@ There are 15 numbered challenges and four side-story entries, for 19 journal ent
 
 Prepare these in the Parrot/Kali VM before distribution so students can begin investigating immediately. A security distribution may include many tools already; verify each required one rather than assuming every image ships the same packages.
 
-Wireshark or TShark, ExifTool, DB Browser for SQLite or sqlite3, Autopsy or The Sleuth Kit, an archive viewer, and a text editor or timeline tool support the forensic sequence. Students inspect supplied fictional captures and records; live network capture is not required. Analysis tools are installed separately from the app.
+Steghide for the original JPEG challenge, Wireshark or TShark, ExifTool, DB Browser for SQLite or sqlite3, Autopsy or The Sleuth Kit, an archive viewer, and a text editor or timeline tool support the forensic sequence. Students inspect supplied fictional captures and records; live network capture is not required. Analysis tools are installed separately from the app.
 
 ## Documentation and access
 

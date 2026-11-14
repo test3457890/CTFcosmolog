@@ -46,3 +46,7 @@ The GitHub Wiki Home page and pinned Discussions welcome post are now published.
 README.md, docs/Setup.md, docs/Virtual Machine.md, docs/README.md, SUPPORT.md, and Guides/Player Guide.md now identify Parrot Security OS with Docker as primary and Kali Linux with Docker as the alternative. Both include a preinstalled browser and forensic toolkit. Ubuntu is retained only as a factual description of automated CI runners, not a recommended target or student OS.
 
 The offline staff vault's Word guides and Markdown equivalents use the same recommendation. The existing vault passphrase is unchanged. GitHub Wiki and the pinned setup discussion are aligned. No application code, challenges, flags, scores, dependencies, or CI runner settings changed.
+
+## Organizer handoff and image evidence
+
+README.md now explicitly lists Steghide. docs/Virtual Machine.md explains the preference for a prepared Parrot Security Edition workstation and equivalent Kali tooling. scripts/check-setup.sh now reports Steghide availability. The Docker/browser workflow also runs after setup documentation and readiness-check changes so the documented handoff receives current validation. Private Setup and Staff guides add organizer instructions for embedding, preserving, downloading, and verifying image evidence. No flags, challenge logic, or scores changed.

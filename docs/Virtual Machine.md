@@ -17,6 +17,10 @@ Use official downloads and image-verification instructions. Choose a guest image
 - [Kali virtual machine downloads](https://www.kali.org/get-kali/#kali-virtual-machines)
 - [Kali prebuilt VirtualBox import](https://www.kali.org/docs/virtualization/import-premade-virtualbox/)
 
+## Why Parrot is the preferred handoff
+
+Parrot Security OS is Brett's preferred teaching workstation: prepare one consistent desktop with the browser, Docker, and investigation tools ready for students. Use Security Edition; do not assume Home Edition includes the security toolkit. This is a classroom preparation preference, not a claim that Parrot solves these challenges better than Kali. Kali Linux supports the same exercises when the same tools are installed. Verify Steghide, Wireshark/TShark, ExifTool, SQLite, and The Sleuth Kit on the actual image before export.
+
 ## Layout A Self-contained practice VM
 
 Run the Linux desktop, browser, analysis tools, and CosmoLog Docker container inside one VM. Students open localhost:3000 inside the guest. This is convenient for an independent practice image with no second target machine.

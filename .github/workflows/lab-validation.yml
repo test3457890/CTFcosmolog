@@ -11,6 +11,9 @@ on:
       - 'public/**'
       - 'tests/browser.cjs'
       - 'scripts/prepare-stego.sh'
+      - 'scripts/check-setup.sh'
+      - 'docs/**'
+      - 'README.md'
   workflow_dispatch:
 permissions:
   contents: read

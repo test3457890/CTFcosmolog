@@ -16,7 +16,7 @@ if command -v curl >/dev/null 2>&1; then
   if curl --max-time 5 -fsS http://127.0.0.1:3000/api/health; then printf '\n%s\n' 'Local app health: reachable'; else printf '%s\n' 'Local app health: not reachable; start the app before checking health'; fi
 else printf '%s\n' 'curl: unavailable; check health in the browser'; fi
 printf '%s\n' 'Optional analysis commands (GUI alternatives may also be used):'
-for tool in tshark exiftool sqlite3 fls icat unzip python3; do
+for tool in steghide tshark exiftool sqlite3 fls icat unzip python3; do
   if command -v "$tool" >/dev/null 2>&1; then printf '  %s: available\n' "$tool"; else printf '  %s: not found\n' "$tool"; fi
 done
 exit "$failed"
