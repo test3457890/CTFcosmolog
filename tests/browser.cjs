@@ -1,0 +1,66 @@
+// Run against a running lab using Playwright. CI installs browser tooling separately.
+const { chromium } = require('playwright');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const base = process.env.CTF_BASE_URL || 'http://127.0.0.1:3000';
+const out = process.env.CTF_SCREENSHOT_DIR || 'artifacts/browser';
+(async () => {
+  fs.mkdirSync(out, { recursive: true });
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage({ viewport: { width: 1440, height: 1050 } });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  try {
+    await page.goto(base + '/login.html');
+    await page.screenshot({ path: out + '/login.png' });
+    await page.getByLabel('Username', { exact: true }).fill('cyber_newbie');
+    await page.getByLabel('Password', { exact: true }).fill('password123');
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+    await page.waitForURL(base + '/');
+    await page.locator('article.post').first().waitFor();
+    assert(await page.locator('article.post').count() >= 40);
+    await page.screenshot({ path: out + '/home.png' });
+    const image = page.locator('img[src="/uploads/stego_challenge.jpg"]');
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate(img => img.decode());
+    assert(await image.evaluate(img => img.naturalWidth > 0));
+    await page.getByRole('link', { name: 'Explore', exact: true }).click();
+    await page.getByLabel('Search Users', { exact: true }).fill("' UNUNIONION SELSELECTECT 1,content,3,4,5 FROM posts--");
+    await page.getByRole('button', { name: 'Search users', exact: true }).click();
+    await page.getByText('PRIVATE: AstroSec{gorgan_sqli_flag_789} - Keep this safe!', { exact: true }).waitFor();
+    assert(!(await page.locator('#view').innerText()).includes('AstroSec{url_hijacking_sriracha_123}'));
+    await page.getByRole('link', { name: 'Messages', exact: true }).click();
+    await page.getByRole('heading', { name: 'Maintenance crew', exact: true }).click();
+    await page.getByLabel('Message', { exact: true }).fill('Browser verification message');
+    await page.getByRole('button', { name: 'Send', exact: true }).click();
+    await page.getByText('Browser verification message', { exact: true }).waitFor();
+    await page.screenshot({ path: out + '/messages.png' });
+    await page.goto(base + '/#/messages/407');
+    await page.getByText('Handler archive confirmation: AstroSec{handler_thread_recovered}.', { exact: true }).waitFor();
+    assert.equal(await page.locator('textarea').count(), 0);
+    await page.getByRole('link', { name: 'Mission journal', exact: true }).click();
+    await page.getByLabel('Flag for Gorgan internal memo').fill('AstroSec{gorgan_sqli_flag_789}');
+    await page.locator('.mission').first().getByRole('button', { name: 'Submit', exact: true }).click();
+    await page.getByRole('heading', { name: '100 / 1,550 points', exact: true }).waitFor();
+    await page.screenshot({ path: out + '/missions.png' });
+    await page.getByRole('link', { name: 'Station tools', exact: true }).click();
+    await page.getByLabel('Relay address').fill('127.0.0.1; cat flag.txt');
+    await page.getByRole('button', { name: 'Run Diagnostics', exact: true }).click();
+    await page.getByText('AstroSec{bash_injection_satellite_uplink_secured}', { exact: false }).waitFor();
+    await page.goto(base + '/#/home');
+    await page.locator('article.post').first().waitFor();
+    await page.getByRole('button', { name: 'Change theme', exact: true }).click();
+    await page.screenshot({ path: out + '/dark.png' });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.screenshot({ path: out + '/mobile.png' });
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    await page.getByRole('link', { name: 'Messages', exact: true }).click();
+    await page.getByRole('heading', { name: 'Welcome to the investigation', exact: true }).waitFor();
+    await page.screenshot({ path: out + '/mobile-messages.png' });
+    assert.deepEqual(errors, []);
+    console.log('PASS: desktop/mobile browser flows, image loading, SQLi separation, messages, intended IDOR, journal scoring, diagnostics, and theme.');
+  } catch (error) {
+    await page.screenshot({ path: out + '/failure.png', fullPage: true });
+    throw error;
+  } finally { await browser.close(); }
+})().catch(error => { console.error(error); process.exitCode = 1; });
