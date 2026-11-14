@@ -2,6 +2,8 @@
 
 Help Nova investigate the fictional evil.esAI incident. Follow people and conversations, preserve original evidence, and explain your findings.
 
+The recommended student workstation is Parrot Security OS with the required tools already installed; Kali Linux is the alternative. The organizer supplies the prepared VM or app address.
+
 ## Getting started
 
 Use the app address supplied by your organizer. Sign in with the assigned student account. Two people using the same account on one instance share progress. Ask the organizer which instance and account belong to your team.

@@ -4,7 +4,7 @@ This is the non-spoiler startup guide. Detailed instructor solutions are in the 
 
 ## 1 Choose the layout
 
-For personal practice, use a Parrot Security or Kali VM and run Docker inside it. For an event, use an organizer-controlled target VM and separate student analysis machines. Ubuntu 24.04 is the target-host baseline used by the Docker validation workflow. Read the [VM guide](Virtual%20Machine.md) before exporting an image for students.
+Use Parrot Security OS with Docker as the primary setup, or Kali Linux with Docker as the alternative. Install the browser and forensic tools directly in the VM; run CosmoLog inside Docker in that same VM. For a scored event, keep the Parrot/Kali target under organizer control and use separate student analysis VMs. Read the [VM guide](Virtual%20Machine.md) before exporting an image for students.
 
 ## 2 Prepare Docker
 
@@ -16,7 +16,7 @@ docker compose version
 docker-compose version
 ```
 
-On Kali, the official documentation uses the distribution package `docker.io`, not the unrelated `docker` package:
+Check the selected distribution's package availability first. On Kali, the official documentation uses `docker.io`, not the unrelated `docker` package. The same package name can be used on Parrot when available in its supported repositories:
 
 ```sh
 sudo apt update
@@ -27,7 +27,7 @@ sudo usermod -aG docker "$USER"
 
 Log out and back in after changing group membership, then run `docker ps`. Only the organizer who controls the target should receive Docker permissions. Do not add competition participants to the target's Docker group.
 
-On Ubuntu, use either your distribution's Docker/Compose packages or Docker's official Ubuntu installation procedure. Do not mix conflicting distribution and Docker CE packages. On Parrot, use the distribution's supported Docker package path; check package availability rather than adding an Ubuntu repository to Parrot.
+Use Parrot/Kali distribution packages or the distribution's documented Docker installation path. Do not mix conflicting distribution and Docker CE packages. Do not add another distribution's repositories just to satisfy a package name.
 
 For a distribution-package installation, inspect Compose availability:
 
@@ -50,10 +50,10 @@ docker-compose version
 Official references:
 
 - [Docker on Kali](https://www.kali.org/docs/containers/installing-docker-on-kali/)
-- [Docker on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+- [Parrot Docker documentation](https://www.parrotsec.org/docs/containers/general-usage-docker/)
 - [Compose plugin](https://docs.docker.com/compose/install/linux/)
 
-Kali/Parrot desktop VM installations are documented paths, not a claim that every distribution release has been tested. Verify your chosen image before the event.
+Parrot Security OS is the primary documented environment; Kali Linux is the alternative. Verify your chosen image before the event. Ubuntu 24.04 appears only as the automated CI runner and is not the recommended student setup.
 
 ## 3 Download the project
 
@@ -92,7 +92,7 @@ The health response should report ready true, 15 primary challenges, seven core 
 
 ## 5 Prepare analysis tools
 
-Use the tools already supplied with your chosen security distribution where available. Confirm Wireshark/TShark, ExifTool, sqlite3 or DB Browser for SQLite, Sleuth Kit or Autopsy, and an archive viewer. Supplied acquisitions are offline files; live capture is unnecessary.
+The organizer should preinstall and verify tools before distributing the Parrot/Kali VM. Use tools already supplied with the chosen security distribution where available. Confirm Wireshark/TShark, ExifTool, sqlite3 or DB Browser for SQLite, Sleuth Kit or Autopsy, and an archive viewer. Supplied acquisitions are offline files; live capture is unnecessary.
 
 An organizer can check common command-line tools with:
 

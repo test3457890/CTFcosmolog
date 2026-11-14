@@ -30,14 +30,16 @@ New to Docker or using Kali/Parrot? Start with the [step-by-step setup guide](do
 
 ## Recommended environment
 
+Use Parrot Security OS with Docker as the primary lab environment. Kali Linux with Docker is the alternative. Install and verify the analysis tools in the VM before handing it to students.
+
 | Use | Recommendation | Verification |
 |---|---|---|
-| Your preferred all-in-one practice setup | Parrot Security or Kali VM in VirtualBox, with CosmoLog in Docker inside the VM | Setup paths documented; these desktop images have not been tested by this repository's CI |
-| Organizer-controlled event target | Ubuntu 24.04 VM running Docker | Docker/browser CI uses Ubuntu 24.04 runners; verify the actual event VM |
-| Student analysis workstation | Parrot Security or Kali VM with browser and forensic tools | Confirm each required tool and sample file before the event |
+| Primary student/practice setup | Parrot Security OS VM in VirtualBox, with CosmoLog in Docker | Preinstall the browser and required forensic tools; verify your chosen VM image |
+| Alternative student/practice setup | Kali Linux VM in VirtualBox, with CosmoLog in Docker | Preinstall and verify the same analysis tools |
+| Scored-event layout | Organizer-controlled Parrot/Kali Docker target and separate Parrot/Kali student analysis VMs | Keep source and target administration with the organizer |
 | Windows host | Run the Linux VM in VirtualBox | A Windows-native app installation is not required |
 
-Parrot is a reasonable first choice for your preferred practice image. Kali is another supported preparation path. The app's Node dependencies run inside Docker; Wireshark and other desktop analysis tools run in the VM. VirtualBox and Docker can be used together.
+Parrot Security OS is the primary recommendation. Kali Linux is the alternative. The app's Node dependencies run inside Docker; Wireshark and other desktop analysis tools run in the VM. VirtualBox and Docker can be used together.
 
 A self-contained practice VM is convenient, but giving someone VM administrator or Docker access also exposes the challenge source and answers. For a scored event, keep the target VM under organizer control and give competitors a separate analysis VM plus the app URL. See the VM guide for both layouts.
 
@@ -64,6 +66,8 @@ There are 15 numbered challenges and four side-story entries, for 19 journal ent
 
 ## Analysis tools
 
+Prepare these in the Parrot/Kali VM before distribution so students can begin investigating immediately. A security distribution may include many tools already; verify each required one rather than assuming every image ships the same packages.
+
 Wireshark or TShark, ExifTool, DB Browser for SQLite or sqlite3, Autopsy or The Sleuth Kit, an archive viewer, and a text editor or timeline tool support the forensic sequence. Students inspect supplied fictional captures and records; live network capture is not required. Analysis tools are installed separately from the app.
 
 ## Documentation and access
@@ -79,3 +83,5 @@ Source, tests, evidence builders, previous commits, and workflow artifacts can r
 ## Validation
 
 The repository has regression, forensic evidence, and Docker/browser validation workflows. These cover the existing web challenges, all seven offline evidence cases, capstone replay/report behavior, scoring, resets, downloads, and desktop/mobile flows. Run event-host readiness checks from the private staff runbook before participants begin. Keep screenshots and logs staff-only.
+
+The automated Docker/browser workflows use Ubuntu 24.04 runners. That CI implementation detail does not change the recommended Parrot/Kali student environment. A prepared Parrot/Kali VM image has not been built or certified by CI.

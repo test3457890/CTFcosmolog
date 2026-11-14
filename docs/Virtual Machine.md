@@ -2,11 +2,12 @@
 
 ## Choose the operating system
 
+The standard handoff is a prepared Parrot Security OS VM with Docker and analysis tools installed. Kali Linux is the alternative. Students should be able to open the VM and start the lab without installing their toolkit.
+
 | Option | Best fit | Preparation notes |
 |---|---|---|
-| Parrot Security | Your preferred investigation/practice desktop | Install forensic tools as needed; verify Docker and Compose in the chosen release |
-| Kali Linux | Another investigation/practice desktop | Official prebuilt VirtualBox images are available; verify downloaded images and installed tools |
-| Ubuntu 24.04 | Organizer-controlled Docker target | Closest match to the Docker/browser validation runner; install analysis tools separately if used for practice |
+| Parrot Security OS with Docker | Primary student/practice environment | Preinstall and verify the browser, forensic tools, Docker, and Compose |
+| Kali Linux with Docker | Alternative student/practice environment | Preinstall and verify the same browser and forensic tools |
 | Windows or macOS host | Runs VirtualBox and the Linux guest | CosmoLog can remain entirely inside the Linux VM |
 
 Use official downloads and image-verification instructions. Choose a guest image compatible with the host CPU; an x86 image is not a universal fit for ARM hosts.
@@ -15,7 +16,6 @@ Use official downloads and image-verification instructions. Choose a guest image
 - [Parrot virtualization documentation](https://www.parrotsec.org/docs/virtualization/)
 - [Kali virtual machine downloads](https://www.kali.org/get-kali/#kali-virtual-machines)
 - [Kali prebuilt VirtualBox import](https://www.kali.org/docs/virtualization/import-premade-virtualbox/)
-- [Ubuntu downloads](https://ubuntu.com/download/desktop)
 
 ## Layout A Self-contained practice VM
 
@@ -25,7 +25,7 @@ Anyone controlling that VM or its Docker service can inspect the target's source
 
 ## Layout B Organizer target and student workstation
 
-Keep an Ubuntu/Docker target VM under organizer control. Give students a separate Parrot or Kali analysis VM and the target's approved app URL. Students use tools on their own workstation but receive no target shell, Docker access, source checkout, or shared folders containing organizer files.
+Keep a Parrot Security OS or Kali Linux target VM running Docker under organizer control. Give students a separate Parrot or Kali analysis VM and the target's approved app URL. Students use tools on their own workstation but receive no target shell, Docker access, source checkout, or shared folders containing organizer files.
 
 Use the event's approved isolated network. Configure reachability for that network and verify from a student machine. Do not expose the intentionally vulnerable app through a home router or internet port-forwarding service.
 
@@ -36,7 +36,7 @@ Suggested starting allocation: two virtual CPUs, 4 GB RAM, and a 30 GB dynamical
 1. Import an official image or install the chosen OS in VirtualBox.
 2. Use NAT for downloading updates and dependencies during preparation.
 3. Set the VM login deliberately; record it separately from application logins. Replace any image-default credentials before handing it out.
-4. Install Docker/Compose and the analysis tools using the Setup guide.
+4. Preinstall Docker/Compose, a browser, Wireshark/TShark, ExifTool, DB Browser for SQLite or sqlite3, Autopsy or The Sleuth Kit, and an archive viewer using the Setup guide. Verify the tools on the prepared image.
 5. Download CosmoLog, start it, and verify health and student login.
 6. Open sample acquisitions in the intended tools. Download all needed packages before planning an offline session.
 7. Stop/restart the app once and confirm progress resets as expected.
@@ -59,3 +59,7 @@ For a competition workstation, do not include the target source at all. For an a
 Record the VM OS, VM login, app URL, app login, startup command, shutdown/reset behavior, assigned instance/team, available tools, and help route. Keep staff answers and vault credentials off this card. Ask recipients to verify their VM starts and the app opens before the event.
 
 For offline use, test after disconnecting the VM's network. Initial Docker builds and missing packages require downloads; do not assume a freshly cloned repository works offline without preparation.
+
+## Automated test environment
+
+GitHub workflows currently use Ubuntu 24.04 runners for Docker/browser validation. Those runners are CI infrastructure, not a student VM recommendation. Keep that tested workflow unchanged while verifying the actual Parrot/Kali image before handoff.

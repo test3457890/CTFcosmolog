@@ -2,6 +2,8 @@
 
 Read the pinned [Start here discussion](https://github.com/test3457890/CTFcosmolog/discussions/1) for downloads, VM setup, and access guidance.
 
+Recommended student environment: Parrot Security OS with Docker and preinstalled analysis tools. Kali Linux with the same toolkit is the alternative.
+
 ## Setup questions
 
 Use [GitHub Discussions](https://github.com/test3457890/CTFcosmolog/discussions) for general setup questions, supported workflows, and feature ideas. If Discussions is unavailable, use the [setup-help issue form](https://github.com/test3457890/CTFcosmolog/issues/new?template=setup-help.yml).

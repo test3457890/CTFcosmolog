@@ -5,7 +5,7 @@ Start here to download, prepare, and use the lab. The [GitHub Wiki](https://gith
 | I want to | Read |
 |---|---|
 | Download and start CosmoLog | [Setup guide](Setup.md) |
-| Choose Parrot, Kali, or Ubuntu and build a ready-to-use VM | [VM preparation and handoff](Virtual%20Machine.md) |
+| Prepare the recommended Parrot Security OS VM or Kali alternative with Docker and tools | [VM preparation and handoff](Virtual%20Machine.md) |
 | Find the correct login or open the staff vault | [Access and credentials](Access.md) |
 | Navigate the app and record evidence | [Player Guide](../Guides/Player%20Guide.md) |
 | Ask a setup question or report a bug | [Help and developer contact](../SUPPORT.md) |

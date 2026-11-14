@@ -40,3 +40,9 @@ Full historical technical notes are preserved in the offline staff package. This
 No challenge, flag, point value, application dependency, or Docker startup command changed. No prebuilt OVA is shipped or claimed; VM preparation remains an organizer procedure.
 
 The GitHub Wiki Home page and pinned Discussions welcome post are now published. README, the documentation hub, and Support link to them. Wiki edits live in GitHub’s separate wiki repository; the main source checkout retains the detailed guides. No staff secrets were published.
+
+## Standard Parrot and Kali environment
+
+README.md, docs/Setup.md, docs/Virtual Machine.md, docs/README.md, SUPPORT.md, and Guides/Player Guide.md now identify Parrot Security OS with Docker as primary and Kali Linux with Docker as the alternative. Both include a preinstalled browser and forensic toolkit. Ubuntu is retained only as a factual description of automated CI runners, not a recommended target or student OS.
+
+The offline staff vault's Word guides and Markdown equivalents use the same recommendation. The existing vault passphrase is unchanged. GitHub Wiki and the pinned setup discussion are aligned. No application code, challenges, flags, scores, dependencies, or CI runner settings changed.
