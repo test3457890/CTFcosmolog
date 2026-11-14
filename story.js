@@ -410,4 +410,24 @@ replies.push(...[
     "text": "As the person who tightens those chairs, I support the artistic interpretation."
   }
 ]);
+// Case acquisition notices link the forensic evidence to the community story.
+posts.push(
+ {user:6,key:'case_http',text:'Relay mirror acquisition is ready: /attachments/cases/relay-transfer.pcap. Several HTTP transfers share this window. Crew chat has the accepted receipt number. #CaseFiles'},
+ {user:6,key:'case_dns',text:'The resolver window includes ordinary station queries and an unusual numbered series. Retries were kept in the acquisition: /attachments/cases/resolver-window.pcap #CaseFiles'},
+ {user:8,key:'case_photo',text:'CAM-17 survey export has the original image and the resized feed copy. They look similar, but the export history differs: /attachments/cases/survey-photos.zip #CaseFiles'},
+ {user:11,key:'case_wal',text:'The workstation snapshot was acquired before shutdown. I kept its sidecar with it; copying just the main file changes the story: /attachments/cases/handoff-snapshot.zip #CaseFiles'},
+ {user:11,key:'case_disk',text:'Removable-media image acquired after a handoff file was removed. The acquisition note describes the layout. Keep an untouched original: /attachments/cases/removable-media.zip #CaseFiles'},
+ {user:5,key:'case_email',text:'Two exported receipt emails, one accepted gateway record. Compare the Message-ID and disposition before trusting the attachment: /attachments/cases/mail-review.zip #CaseFiles'},
+ {user:12,key:'case_timeline',text:'Nova field note: three clocks describe the same incident. Local time order is misleading; correlate requests after normalization: /attachments/cases/incident-timeline.zip #CaseFiles'}
+);
+replies.push(
+ {user:5,post:'case_http',text:'Crew log confirms R-314 was accepted. R-271 was a cancelled test, even if you find its transfer later.'},
+ {user:8,post:'case_dns',text:'The old transport put a sequence label ahead of a hex fragment. Packet order was never the record order.'},
+ {user:11,post:'case_photo',text:'Preview exports may strip annotations. Preserve the original file instead of saving a screenshot.'},
+ {user:8,post:'case_wal',text:'Use a writable working copy with the exact sidecar name. Do not modify your original acquisition.'},
+ {user:5,post:'case_disk',text:'Deleting an entry is different from overwriting the file content. Record how you recovered it.'},
+ {user:11,post:'case_email',text:'These are offline exports. The gateway disposition is supplied evidence for this scenario, not a live sender verification service.'},
+ {user:6,post:'case_timeline',text:'A successful drill is still a drill. Follow the approved production request through all three sources.'}
+);
+threads.find(t=>t.id===102).messages.push({user:5,text:'For the acquisition review: accepted maintenance receipt R-314. R-271 was cancelled. The new case files are linked under #CaseFiles.'});
 module.exports={people,posts,replies,threads};

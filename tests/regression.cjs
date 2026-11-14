@@ -54,7 +54,7 @@ async function stop() {
     probe.once('error', reject);
     probe.listen(3000, '127.0.0.1', () => probe.close(resolve));
   });
-  for (const name of ['server.js', 'social.js', 'sqlite.js', 'story.js', 'public', 'etc', 'flag.txt']) {
+  for (const name of ['server.js', 'social.js', 'forensics.js', 'sqlite.js', 'story.js', 'public', 'etc', 'flag.txt']) {
     fs.cpSync(path.join(root, name), path.join(temp, name), { recursive: true });
   }
   fs.closeSync(fs.openSync(path.join(temp, 'database.sqlite'), 'a'));
@@ -150,7 +150,7 @@ async function stop() {
   const crew=await (await request('/api/social/conversations/102',{headers})).json();
   assert(crew.messages.some(m=>m.content.includes(Buffer.from('AstroSec{maintenance_message_decoded}').toString('base64'))));
   let journal=await (await request('/api/missions',{headers})).json();
-  assert.equal(journal.missions.length,11);assert.equal(journal.score,0);assert(!JSON.stringify(journal).includes(flags[0]));
+  assert.equal(journal.missions.length,18);assert.equal(journal.score,0);assert(!JSON.stringify(journal).includes(flags[0]));
   const submitFlag=async(id,flag)=>request('/api/missions/'+id+'/submit',{method:'POST',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({flag})});
   assert.equal((await submitFlag('core1','wrong')).status,400);
   assert.equal((await submitFlag('core1',flags[0])).status,200);
@@ -174,6 +174,14 @@ async function stop() {
   const optionalFlags=['AstroSec{handler_thread_recovered}','AstroSec{relay_handoff_confirmed}','AstroSec{facility_metadata_recovered}','AstroSec{maintenance_message_decoded}'];
   for(let i=0;i<optionalFlags.length;i++)assert.equal((await submitFlag('side'+(i+1),optionalFlags[i])).status,200);
   for(let i=1;i<flags.length;i++)assert.equal((await submitFlag('core'+(i+1),flags[i])).status,200);
+  const cases=await (await request('/api/case-files',{headers})).json();assert.equal(cases.length,7);
+  assert.equal(health.forensicChallenges,7);
+  const forensicFlags=['AstroSec{http_object_recovered}','AstroSec{dns_fragments_reassembled}','AstroSec{original_photo_verified}','AstroSec{wal_handoff_restored}','AstroSec{deleted_handoff_recovered}','AstroSec{mail_route_verified}','AstroSec{uplink_sess42_kronos7}'];
+  assert(forensicFlags.every(flag=>!JSON.stringify(journal).includes(flag)));
+  for(const c of cases){const bytes=Buffer.from(await (await request(c.url)).arrayBuffer());assert.equal(bytes.length,c.bytes);assert.equal(require('node:crypto').createHash('sha256').update(bytes).digest('hex'),c.sha256);}
+  assert.equal((await submitFlag('forensic1',forensicFlags[1])).status,400);
+  for(let i=0;i<forensicFlags.length;i++)assert.equal((await submitFlag('forensic'+(i+1),forensicFlags[i])).status,200);
+  await submitFlag('forensic1',forensicFlags[0]);
   journal=await (await request('/api/missions',{headers})).json();assert.equal(journal.score,1550);assert(journal.missions.every(m=>m.solved));
   const follow=await request('/api/social/people/12/follow',{method:'POST',headers});assert.equal(follow.status,200);
   const directory=await (await request('/api/social/people',{headers})).json();assert(directory.find(p=>p.id===12).following);

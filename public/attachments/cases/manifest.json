@@ -1,0 +1,33 @@
+{
+  "scenario": "CosmoLog fictional offline evidence",
+  "files": {
+    "handoff-snapshot.zip": {
+      "sha256": "ba881e28e4796b90bd7ce3425e0cf4b2e7cbcf497985370c3787b45a91ee544e",
+      "bytes": 1008
+    },
+    "incident-timeline.zip": {
+      "sha256": "e33a4403936304e97d0221a57b2eadec6c22cff8583d9f50e6a9f176832bc7d3",
+      "bytes": 1045
+    },
+    "mail-review.zip": {
+      "sha256": "dce9edb572872d8a417377305a84796b17debe2d368804e1d8331a9ed5fc1624",
+      "bytes": 1641
+    },
+    "relay-transfer.pcap": {
+      "sha256": "ad7b454fe3f5329a59e82e0eba086031916a69ff14969744e9e67f1fd2351b51",
+      "bytes": 4361
+    },
+    "removable-media.zip": {
+      "sha256": "109516e89f15c93c18120e57a05b45fa47ab046e3dadb2ecc0dd34882be77d82",
+      "bytes": 2094
+    },
+    "resolver-window.pcap": {
+      "sha256": "b927a2893259ef263cd3eb71d65212f4527d4805e1d4ef9f02e486bdc6dbcb2e",
+      "bytes": 1890
+    },
+    "survey-photos.zip": {
+      "sha256": "da30fcb56e667e12da2c03f23df95e85515a03847ffb0139ed91583ccb63911e",
+      "bytes": 7680
+    }
+  }
+}

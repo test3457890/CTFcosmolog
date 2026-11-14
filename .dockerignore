@@ -6,3 +6,5 @@ tests
 database.sqlite*
 *.zip
 artifacts/
+
+!public/attachments/cases/*.zip

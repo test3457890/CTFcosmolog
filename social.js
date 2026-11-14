@@ -2,6 +2,8 @@ const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcryptjs');
 const { run, all, get } = require('./sqlite');
 const community = require('./story');
+const forensicMissions = require('./forensics');
+const caseManifest = require('./public/attachments/cases/manifest.json');
 
 const missions = [
   { id: 'core1', title: 'Gorgan internal memo', points: 100, kind: 'core', brief: 'Recover the private Gorgan post using the user search.', hint: 'One pass through a keyword filter may leave a second keyword behind.', flag: 'AstroSec{gorgan_sqli_flag_789}' },
@@ -16,6 +18,7 @@ const missions = [
   { id: 'side3', title: 'Carrier provenance', points: 0, kind: 'optional', brief: 'Inspect the metadata in the facility diagram attached to the maintenance thread.', hint: 'Download /attachments/facility.svg and inspect its XML metadata. This is separate from the core stego JPEG.', flag: 'AstroSec{facility_metadata_recovered}' },
   { id: 'side4', title: 'Encoded side conversation', points: 0, kind: 'optional', brief: 'Decode the maintenance message using the method mentioned in the same conversation.', hint: 'The side conversation uses Base64 encoding. It is not encryption.', flag: 'AstroSec{maintenance_message_decoded}' }
 ];
+missions.push(...forensicMissions);
 module.exports = async (app, db, auth) => {
   // Social state is not attached to the deliberately injectable search database.
   // This is still one vulnerable lab process, not a security boundary against RCE/LFI.
@@ -70,7 +73,8 @@ module.exports = async (app, db, auth) => {
     edited_at: (await get(social,'SELECT edited_at FROM edits WHERE post_id=?',[p.id]))?.edited_at||null,
     replies: (await get(social,'SELECT COUNT(*) AS n FROM replies WHERE post_id=?',[p.id])).n
   })));
-  app.get('/api/health', (req,res) => res.json({ ready: true, coreChallenges: 7, corePoints: 1550, optionalMissions: 4 }));
+  app.get('/api/health', (req,res) => res.json({ ready: true, coreChallenges: 7, corePoints: 1550, optionalMissions: 4, forensicChallenges: 7 }));
+  app.get('/api/case-files',auth,(req,res)=>res.json(forensicMissions.map(m=>({id:m.id,title:m.title,tools:m.tools,difficulty:m.difficulty,filename:m.evidence,url:'/attachments/cases/'+m.evidence,...caseManifest.files[m.evidence]}))));
   app.get('/api/social/me',auth,wrap(async(req,res)=>{
     const user = await existsUser(req.user.id);
     if (!user) return res.status(404).json({error:'This token does not identify an existing profile.'});
