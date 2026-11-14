@@ -4,6 +4,27 @@ A fictional social-network investigation following Nova on a Journey through the
 
 [Download ZIP](https://github.com/test3457890/CTFcosmolog/archive/refs/heads/main.zip) · [Setup guide](docs/Setup.md) · [VM guide](docs/Virtual%20Machine.md) · [Wiki](https://github.com/test3457890/CTFcosmolog/wiki) · [Documentation hub](docs/README.md) · [Get help](https://github.com/test3457890/CTFcosmolog/discussions/1)
 
+## Screenshots
+
+These previews show the running CosmoLog app. Start in the social feed, explore community profiles, and download original evidence from Case files.
+
+| Social feed | Community search |
+|---|---|
+| [![CosmoLog social feed](docs/screenshots/Feed.png)](docs/screenshots/Feed.png) | [![CosmoLog community search](docs/screenshots/Explore.png)](docs/screenshots/Explore.png) |
+
+| Public profile | Evidence downloads |
+|---|---|
+| [![CosmoLog public profile](docs/screenshots/Profile.png)](docs/screenshots/Profile.png) | [![CosmoLog forensic evidence downloads](docs/screenshots/Evidence.png)](docs/screenshots/Evidence.png) |
+
+Click a preview to view it at full resolution.
+
+<details>
+<summary>Mobile preview in dark mode</summary>
+
+<img src="docs/screenshots/Mobile.png" alt="CosmoLog public profile on a mobile screen in dark mode" width="300">
+
+</details>
+
 ## Download and start
 
 Inside your prepared Linux VM, with Docker and `docker-compose` installed:
