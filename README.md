@@ -2,7 +2,7 @@
 
 A fictional social-network investigation following Nova on a Journey through the evil.esAI incident. Follow community clues, analyze evidence with forensic tools, and finish with Challenge 15 in a reconstructed operations workspace.
 
-[Download ZIP](https://github.com/test3457890/CTFcosmolog/archive/refs/heads/main.zip) · [Setup guide](docs/Setup.md) · [VM guide](docs/Virtual%20Machine.md) · [Documentation hub](docs/README.md) · [Get help](SUPPORT.md)
+[Download ZIP](https://github.com/test3457890/CTFcosmolog/archive/refs/heads/main.zip) · [Setup guide](docs/Setup.md) · [VM guide](docs/Virtual%20Machine.md) · [Wiki](https://github.com/test3457890/CTFcosmolog/wiki) · [Documentation hub](docs/README.md) · [Get help](https://github.com/test3457890/CTFcosmolog/discussions/1)
 
 ## Download and start
 

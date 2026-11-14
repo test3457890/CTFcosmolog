@@ -1,6 +1,6 @@
 # CosmoLog documentation hub
 
-Start here to download, prepare, and use the lab. These pages contain setup and player guidance; staff answers remain in the separate offline vault.
+Start here to download, prepare, and use the lab. The [GitHub Wiki](https://github.com/test3457890/CTFcosmolog/wiki) provides a public starting page, and the pinned [help discussion](https://github.com/test3457890/CTFcosmolog/discussions/1) explains questions and organizer access. These pages contain setup and player guidance; staff answers remain in the separate offline vault.
 
 | I want to | Read |
 |---|---|

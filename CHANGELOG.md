@@ -38,3 +38,5 @@ Full historical technical notes are preserved in the offline staff package. This
 | CHANGELOG.md | Record the onboarding and support changes. |
 
 No challenge, flag, point value, application dependency, or Docker startup command changed. No prebuilt OVA is shipped or claimed; VM preparation remains an organizer procedure.
+
+The GitHub Wiki Home page and pinned Discussions welcome post are now published. README, the documentation hub, and Support link to them. Wiki edits live in GitHub’s separate wiki repository; the main source checkout retains the detailed guides. No staff secrets were published.
