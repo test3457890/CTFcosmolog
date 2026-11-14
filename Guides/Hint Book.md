@@ -794,6 +794,72 @@ unzip incident-timeline.zip -d timeline-work
 
 Flag: AstroSec{uplink_sess42_kronos7}
 
+## Challenge numbering and final review
+
+| Number | Exercise |
+| --- | --- |
+| 1 through 7 | Original web challenges; 1,550 total points |
+| 8 through 14 | Forensic cases 1 through 7; completion only |
+| 15 | The compatibility exception; completion only |
+| Side stories | Four separate unscored investigations |
+
+The journal has 19 entries. Operations console links the 14 earlier numbered challenges to their learning objectives and shows whether each flag was recorded by the current account. This is a progress record, not proof of tool use. Earlier completion is not a prerequisite for opening the final review.
+
+## Challenge 15 The compatibility exception
+
+Capstone | Separate completion | 0 points
+
+Nova reconstructed the relay backend from the incident evidence. Audit the snapshot, distinguish deployed code from retained examples, reproduce unexpected access, and demonstrate the remediation. Source files are text in a bounded simulator; no real management service is exposed.
+
+### Hints in order
+
+1. Read deploy/runtime.json, config/defaults.json, and src/main.js. Trace the entry point and merge precedence before judging an archived filename.
+
+2. Inspect src/identity.js and src/router.js. Compare the verified analyst identity with the effective role used by the archive guard.
+
+3. Replay /internal/relay/archive in As deployed mode. Use x-relay-compat: R-314 with receipt R-314, session sess-42, and relay KRONOS-7. Then repeat the same request in Patch preview.
+
+### Evidence to connect
+
+The HTTP and crew records establish the accepted receipt. The email and database acquisitions corroborate it; the timeline identifies the production session and active relay. DNS reconstruction, metadata review, deleted-file recovery, and the original web exercises teach students to preserve originals, distinguish appearance from effective state, trace input, and test authorization rather than assume it.
+
+### Inactive alternatives
+
+archive/admin-v1.js contains a suspicious historical function but is not loaded by the current entry point. examples/accounts.txt contains explicitly fictional documentation credentials. Neither grants access. Do not reward an unsupported claim that either is the live cause.
+
+## Challenge 15 verification and closure
+
+### Record the three replay states
+
+```text
+Route: /internal/relay/archive
+Mode: As deployed
+Headers: {}
+Expected simulated status: 403
+
+Receipt: R-314
+Production session: sess-42
+Active relay: KRONOS-7
+Headers: {"x-relay-compat":"R-314"}
+Mode: As deployed -> expected simulated status 200
+Mode: Patch preview -> expected simulated status 403
+```
+
+The deployment enables compatibility even though defaults disable it. src/identity.js uses a caller-controlled header and accepted receipt to assign archivist. src/router.js checks that effective role. The patch preview removes the override and authorizes from the verified analyst identity, so the same request fails.
+
+### Submit the finding
+
+| Finding field | Required selection |
+| --- | --- |
+| Loaded source | src/identity.js |
+| Observed cause | Caller input changes the effective role |
+| Remediation | Remove the caller-controlled role override |
+| Inactive alternative | archive/admin-v1.js |
+
+The final flag is returned only after the current account records baseline, bypass, and valid patch-preview checkpoints and submits the correct finding. A copied final flag is rejected by the journal until the report checkpoint exists. Record the returned flag under Final in Mission journal; repeating the submission does not add points.
+
+Flag: AstroSec{legacy_override_exposed_and_removed}
+
 ## Forensic reference sources
 
 Wireshark export objects and stream analysis: https://www.wireshark.org/docs/wsug_html_chunked/ChIOExportSection.html
@@ -807,3 +873,5 @@ ExifTool tag reference: https://exiftool.org/TagNames/EXIF.html
 The Sleuth Kit deleted file listing: https://www.sleuthkit.org/sleuthkit/man/fls.html
 
 The Sleuth Kit file recovery: https://www.sleuthkit.org/sleuthkit/man/icat.html
+
+Authorization review reference: https://top10.owasp.org/2025/A01_2025-Broken_Access_Control/. The capstone teaches trusted role decisions, effective configuration, reachable code, negative tests, and remediation verification.

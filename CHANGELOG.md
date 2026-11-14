@@ -9,7 +9,7 @@ The attachment-based corrected project replaces the older GitHub upload. The sev
 | `server.js` | Apply the requested stable-ID, Bearer-token, and scoped SQLi fixes; wait for deterministic seeding before listening; load the community module; create the upload directory; prevent private posts on public accounts from leaking to other identities. Existing core challenge endpoints remain. |
 | `sqlite.js` | Promise wrappers for ordered SQLite initialization and social queries. |
 | `social.js` | Social feeds, reactions, reposts, author-only edits/pins, bookmarks, follows, replies, inboxes, membership-checked writes, notifications, optional conversation IDOR, and mission submission/progress. Social state is an unattached in-memory database. |
-| `story.js` | Eight additional fictional users, 91 story posts, 38 seeded replies, six ordinary inbox conversations, one restricted operations conversation, and resolvable red herrings. |
+| `story.js` | Eight additional fictional users, 92 story posts, 39 seeded replies, six ordinary inbox conversations, one restricted operations conversation, and resolvable red herrings. |
 | `public/index.html` | Social application shell with Home, Explore, Messages, Notifications, Bookmarks, Profile, Mission journal, and Station tools. |
 | `public/app.js` | Navigation, safe text rendering, forms, interactions, per-post links, challenge tools, flag submission, and theme control. |
 | `public/style.css` | Responsive social layout, light/dark themes, initials avatars, conversation and mission views, and keyboard focus states. |
@@ -87,3 +87,23 @@ Passed: JavaScript syntax, the expanded real-server regression suite, DOM intera
 | `CHANGELOG.md` | Record every file changed for this expansion. |
 
 Validation passed on the evidence/app commit: real-server regression, Docker startup and HTTP-served stego extraction, all seven forensic solutions with the intended tools, and desktop/mobile Chromium flows. Original core flags, points, dependency versions, and startup commands remain unchanged.
+
+## Challenge 15 and comprehensive Word guides
+
+| File | Change and reason |
+|---|---|
+| `capstone.js` | Define the final mission, nine fictional source/config/log snapshots, fourteen learning summaries, bounded replay behavior, and structured finding criteria. Source is displayed as text; no arbitrary code or external requests are executed. |
+| `social.js` | Add numbered challenges 1–15 and the capstone workspace/replay/report APIs. Store per-account baseline/bypass/patch/report checkpoints in memory. Reject direct capstone flag completion until the finding exists. Keep core scoring unchanged. |
+| `story.js` | Add a final-review post and corroborating reply connecting the reconstructed service to the community story; 92 story posts and 39 replies now seed. |
+| `public/index.html` | Add Operations console navigation. |
+| `public/app.js` | Add Source, Replay, Evidence, and Finding views; searchable source; fourteen learning summaries; replay decision traces; final report closure; numbered mission labels and Final filter. |
+| `public/style.css` | Add restrained responsive console styling, source/file views, checkpoint indicators, replay/report forms, evidence cards, and scrollable desktop navigation. |
+| `tests/regression.cjs` | Verify 19 entries and 15 primary challenges, checkpoint/report gating, exact evidence matching, inactive sample behavior, invalid inputs, patch denial, per-account isolation, reset behavior, and unchanged/idempotent scoring. |
+| `tests/browser.cjs` | Exercise source reading, evidence history, denied/successful/patched replays, report submission, final journal completion, and mobile console layout. Capture console screenshots. |
+| `Guides/CosmoLog Setup Guide.docx` and `Guides/Setup.md` | Replace the short setup document with a comprehensive Setup and Learning Guide covering deployment, tools, evidence work, navigation, learning sequence, capstone workflow, judging, updates/backups/resets, readiness, and troubleshooting. Correct current archive/checkout names. |
+| `Guides/CosmoLog Hint Book.docx` and `Guides/Hint Book.md` | Add the numbering map and progressive capstone hints, replay states, final method, and flag. |
+| `Guides/CosmoLog Staff Guide.docx` and `Guides/Staff Guide.md` | Add exact capstone replay/report answers, inactive-alternative explanations, judging criteria, simulator boundaries, reset behavior, and authorization reference. |
+| `README.md` | Document Challenge 15, the 15-plus-four structure, report-gated completion, scope, numbering, expanded guides, validation, and updated content counts. |
+| `CHANGELOG.md` | Record all files changed for this final expansion. |
+
+The original seven flags and 1,550-point total remain unchanged. The new capstone is an unscored completion task. Earlier evidence solutions and Docker startup remain unchanged. The code commit passed regression, real Docker/browser validation, and all seven forensic solutions using real tools. Word guides were rendered and visually reviewed before delivery.

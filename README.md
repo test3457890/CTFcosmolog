@@ -27,7 +27,7 @@ Use an authorized training VM/network. The core command execution and file trave
 
 - Home feed with For you and Following tabs.
 - Twelve fictional profiles with bios, initials avatars, and follower counts.
-- Ninety-one additional story posts, 38 seeded replies, and ordinary life alongside incident clues.
+- Ninety-two additional story posts, 39 seeded replies, and ordinary life alongside incident clues.
 - Likes, reposts, threaded replies, bookmarks, follows, individual post links, author-only editing, and pinned posts.
 - Six normal inbox conversations for each student account, plus a restricted operations thread that supports an optional IDOR exercise.
 - Message replies and linked notifications, a persistent light/dark preference, and responsive layouts.
@@ -96,7 +96,7 @@ Open Case files for original evidence, file sizes, and SHA-256 hashes. Follow #C
 | The accepted message | Email viewer or Python email parser | Correlate Message-ID with a gateway disposition and decode the correct MIME attachment. |
 | The three clocks | Timeline Explorer, spreadsheet, or Python | Normalize timestamp offsets, correlate request/session IDs, and exclude rejected events and drills. |
 
-These seven cases form a separate unscored completion track. The original seven core exercises retain their flags and 1,550-point total, and the four earlier side investigations remain available. There are 18 journal entries in total. The evidence uses fictional records, documentation IP addresses, and .test domains. Student analysis tools are installed separately; the application dependencies and startup commands are unchanged.
+These seven cases form a separate unscored completion track. The original seven core exercises retain their flags and 1,550-point total, and the four earlier side investigations remain available. Together with Challenge 15 below, there are 19 journal entries: 15 numbered challenges and four side stories. The evidence uses fictional records, documentation IP addresses, and .test domains. Student analysis tools are installed separately; the application dependencies and startup commands are unchanged.
 
 Harder cases require corroboration or reconstruction, rather than obscure passwords. The accepted receipt is R-314, identified in crew chat. A cancelled receipt, stripped preview, database checkpoint, and successful drill each have evidence explaining why they are insufficient. Source inspection and the app's intentional command execution can still bypass the intended learning paths; staff should ask students to explain their method.
 
@@ -107,6 +107,16 @@ The Forensic evidence validation workflow solves the shipped files using real to
 ```sh
 python3 tests/forensics.py
 ```
+
+## Challenge 15 The compatibility exception
+
+Operations console reconstructs a fictional relay backend with Source, Replay, Evidence, and Finding tabs. Students review deployment settings, source imports, effective identity, and logs; compare them with an archived admin function and sample credentials; then demonstrate the actual access-control flaw and its remediation.
+
+The live modeled issue is a compatibility override that promotes a verified analyst when it sees caller-controlled input. The historical function and documentation credentials are inactive alternatives. Students must record a denied baseline, reproduce archive access with corroborated receipt/session/relay evidence, and show that the same request is denied by the patch preview. The final finding identifies the loaded source, trust failure, effective fix, and inactive alternative. Only then is the capstone flag returned; copied flags cannot complete the journal without that account's report checkpoint.
+
+The Evidence tab shows the 14 earlier numbered challenges, their learning objectives, and whether this account recorded a flag. It does not claim a student used a particular tool. Earlier completion is not a prerequisite for opening the final review. Challenges 1–7 retain their 1,550 points, challenges 8–14 are the seven forensic cases, and challenge 15 is the capstone. The four side stories are separate. Forensic and capstone completion remain unscored.
+
+Displayed source is text, never evaluated. The replay model accepts only listed routes and bounded inputs; it makes no outbound requests and changes no real management service. Replay/report checkpoints are per account and reset with the lab. The original web vulnerabilities and public source still permit shortcuts outside this controlled learning path, so staff should review the student's explanation.
 
 ## Stable identities and resets
 
@@ -155,7 +165,7 @@ All three guides now include the seven forensic cases: setup and acquisition han
 - [Hint Book](Guides/Hint%20Book.md): the seven original exercises and four optional investigations.
 - [Staff Guide](Guides/Staff%20Guide.md): credentials, flags, solutions, judging, red-herring explanations, and scoring.
 
-Matching Word files in Guides/ use monochrome formatting and page numbers. Keep staff solutions separate from competitor materials. Source is public, so this repository also serves as an instructor/reference distribution.
+Matching Word files in Guides/ use monochrome formatting and page numbers. The expanded Setup and Learning Guide covers host installation, student tools, navigation, evidence handling, the full learning sequence, Challenge 15, operation/reset/backup procedures, validation, and troubleshooting. Keep staff solutions separate from competitor materials. Source is public, so this repository also serves as an instructor/reference distribution.
 
 ## Validation
 
@@ -169,7 +179,7 @@ node --check public/app.js
 node tests/regression.cjs
 ```
 
-Tests start the real server in a temporary directory. They cover all six code-based core solutions; seeded identities across three starts; inflated prior SQLite sequences; cookie/raw/Bearer authentication; SQLi scope; concurrent search; post creation/upload; private-post isolation; likes/bookmarks/reposts; author-only edits/pins; message notifications; replies; normal inbox scoping; intended optional IDOR reads and rejected nonmember writes; optional metadata/Base64/correction evidence; and mission score deduplication.
+Tests start the real server in a temporary directory. They cover capstone replay/report gating, inactive alternatives, patch behavior, account isolation, all 19 entries, and all six code-based core solutions; seeded identities across three starts; inflated prior SQLite sequences; cookie/raw/Bearer authentication; SQLi scope; concurrent search; post creation/upload; private-post isolation; likes/bookmarks/reposts; author-only edits/pins; message notifications; replies; normal inbox scoping; intended optional IDOR reads and rejected nonmember writes; optional metadata/Base64/correction evidence; and mission score deduplication.
 
 Additional DOM interaction checks exercised navigation, messaging, flag submission, SQLi results, and theme switching. The Docker validation workflow now builds the existing image, exercises the preserved startup commands, verifies extraction from the HTTP-served stego image, and runs real Chromium desktop/mobile flows. It retains screenshots and container diagnostics as workflow artifacts. See the latest [validation results](https://github.com/test3457890/CTFcosmolog/actions/workflows/lab-validation.yml). Application dependency versions and the user startup workflow remain unchanged.
 
