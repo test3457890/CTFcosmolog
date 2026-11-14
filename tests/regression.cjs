@@ -67,6 +67,10 @@ async function stop() {
   assert.equal((await request('/login.html')).status, 200);
   assert.equal((await request('/style.css')).status, 200);
   assert.equal((await request('/app.js')).status,200);
+  const shippedImage=fs.readFileSync(path.join(root,'public/uploads/stego_challenge.jpg'));
+  assert(shippedImage.length>1000);
+  const imageDownload=await request('/uploads/stego_challenge.jpg');assert.equal(imageDownload.status,200);
+  assert.deepEqual(Buffer.from(await imageDownload.arrayBuffer()),shippedImage);
   const login = await request('/api/login', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username: 'cyber_newbie', password: 'password123' })
@@ -205,7 +209,7 @@ async function stop() {
   }
   console.log('PASS: IDs across 3 starts; cookie/raw/Bearer auth; SQLi scope and concurrency; JWT/admin; command injection; traversal/debug; posting/upload/static pages.');
   console.log('PASS: social feeds, inbox scoping and intended IDOR, reply permissions, likes/bookmarks, private-post isolation, four optional mission evidence paths, and score deduplication.');
-  console.log('NOT TESTED: Docker build/runtime and manual Challenge 3 stego image.');
+  console.log('Docker, real browser flows, and steghide extraction are checked by the separate lab-validation workflow.');
 })().catch(err => { console.error(err); process.exitCode = 1; }).finally(async () => {
   await stop(); fs.rmSync(temp, { recursive: true, force: true });
 });

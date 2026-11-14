@@ -14,12 +14,16 @@ The attachment-based corrected project replaces the older GitHub upload. The sev
 | `public/app.js` | Navigation, safe text rendering, forms, interactions, per-post links, challenge tools, flag submission, and theme control. |
 | `public/style.css` | Responsive social layout, light/dark themes, initials avatars, conversation and mission views, and keyboard focus states. |
 | `public/login.html` and `public/login.js` | Updated sign-in page with the existing student credentials and matching theme behavior. |
-| `public/attachments/facility.svg` | Original diagram with XML metadata for optional investigation 3, separate from the manual core stego JPEG. |
+| `public/attachments/facility.svg` | Original diagram with XML metadata for optional investigation 3, separate from the included core stego JPEG. |
 | `public/uploads/mission_brief.txt`, `flag.txt`, and `etc/ai_config.conf` | Bring in the existing supplied challenge artifacts missing from the older GitHub version. Contents remain unchanged. |
 | `docker-compose.yml` | Rename the service to cosmolog, preserving startup, port, bind mounts, and restart policy. |
-| `.gitignore` | Exclude node_modules, database.sqlite, and its SQLite journal/WAL sidecars. |
-| `.dockerignore` | Keep local dependencies, database files, guides, and tests out of the application image context. |
+| `.gitignore` | Exclude node_modules, database.sqlite, its SQLite journal/WAL sidecars, and browser-test artifacts. |
+| `.dockerignore` | Keep local dependencies, database files, guides, tests, and browser-test artifacts out of the application image context. |
 | `tests/regression.cjs` | Real-server checks for the six code-based core solutions, IDs over three starts, authentication, scoped SQLi, privacy, social interactions, intentional IDOR, four side-mission evidence paths, and exact/idempotent scoring. |
+| `public/uploads/stego_challenge.jpg` | Include the prepared core Challenge 3 JPEG, verified with the original flag and cosmolog passphrase. |
+| `scripts/prepare-stego.sh` | Preserve valid images or rebuild and extraction-verify a damaged carrier as an organizer recovery step. |
+| `tests/browser.cjs` | Real Chromium checks for desktop/mobile navigation, login, images, SQLi separation, messages, IDOR, scoring, diagnostics, and themes; capture screenshots. |
+| `.github/workflows/lab-validation.yml` | Build and start Docker using the preserved commands, extract the HTTP-served stego flag, run browser checks, and retain diagnostics. Read-only repository permissions. |
 | `.github/workflows/test.yml` | Run syntax and regression checks on pushes and pull requests with Node 22. |
 
 The obsolete repository-root index.html, login.html, and style.css are removed; the served copies are under public/. Dockerfile, package.json, and seed.js retain the attachment-based dependency versions and workflow. The old optional seed.js helper is not needed for the new built-in community seed.
@@ -35,10 +39,10 @@ The obsolete repository-root index.html, login.html, and style.css are removed; 
 | `Guides/Setup.md`, `Guides/Hint Book.md`, and `Guides/Staff Guide.md` | GitHub-readable equivalents of the Word guides. |
 | `CHANGELOG.md` | This complete file and behavior change list. |
 
-## Intentional boundaries and remaining checks
+## Intentional boundaries and validation
 
 Only the seven core missions award points. Duplicate submissions do not add points. Progress follows the active JWT account; forged identities and shared student accounts make the local journal a learning aid, not an authoritative external leaderboard. All database and social progress resets on restart. Uploaded files remain on the host.
 
 The isolated search snapshot cannot retrieve Sriracha posts or password hashes. The new social database is not attached to that snapshot. The single vulnerable server still permits intentional command execution and traversal, so source inspection and cross-challenge shortcuts remain possible. Conversation 407 deliberately lacks a read membership check; writing still requires membership.
 
-Passed locally: JavaScript syntax, the expanded real-server regression suite, and DOM interaction checks for feed rendering, navigation, messages, flags, SQLi output, the intended IDOR view, and theme changes. All Word guides were rendered and reviewed. The graphical browser could not launch in this environment, so visual desktop/mobile validation remains unverified. Docker and the manually prepared core stego JPEG were not executed here. The missing-JPEG feed state is handled explicitly, and setup documentation requires extraction verification before scoring Challenge 3.
+Passed: JavaScript syntax, the expanded real-server regression suite, DOM interactions, the original Docker build/startup workflow, extraction from the supplied and HTTP-served JPEG, and real Chromium desktop/mobile flows. Captured light/dark desktop and mobile screens were visually reviewed. All updated Word guides were rendered and reviewed. The Node regression suite also checks that the served JPEG matches the included file. The validation workflow uses Ubuntu 24.04 for compatibility with its pinned browser tooling, installed separately from the application dependencies. Run the documented readiness checks on the actual event host before competitors begin.

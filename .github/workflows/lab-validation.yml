@@ -13,7 +13,7 @@ on:
       - 'scripts/prepare-stego.sh'
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 concurrency:
   group: cosmolog-lab-validation
   cancel-in-progress: false
@@ -30,16 +30,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y steghide imagemagick fonts-dejavu-core
+          test -s public/uploads/stego_challenge.jpg
           sh scripts/prepare-stego.sh
-      - name: Commit the prepared image when absent or invalid
-        run: |
-          git add public/uploads/stego_challenge.jpg
-          if ! git diff --cached --quiet; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git commit -m 'Include verified Challenge 3 stego image'
-            git push origin HEAD:main
-          fi
+          git diff --exit-code -- public/uploads/stego_challenge.jpg
       - name: Exercise the preserved Docker startup workflow
         run: |
           mkdir -p "$RUNNER_TEMP/cosmolog-bin"

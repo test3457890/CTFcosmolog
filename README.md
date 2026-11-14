@@ -49,9 +49,19 @@ The social interface renders submitted text as text. Stored XSS is not one of th
 | 7 | API disclosure | 150 | `/api/debug/dump` |
 | | Total | 1,550 | |
 
-### Challenge 3 preparation
+### Challenge 3 is included
 
-The original attachment ZIP did not include `public/uploads/stego_challenge.jpg`. The image remains a manual organizer preparation step. Follow [CosmoLog Setup Guide](Guides/Setup.md) to create the JPEG and embed `AstroSec{st3g0_s4t3ll1t3_s3cr3t}` using steghide and passphrase `cosmolog`. Verify extraction from a downloaded copy before scoring the challenge. The site can start without the image, but that challenge is not ready until the hidden flag can be extracted. The feed displays a useful attachment-unavailable message if setup is incomplete.
+`public/uploads/stego_challenge.jpg` is now shipped with the existing flag and passphrase `cosmolog`. Normal setup no longer requires creating the image. Extraction was verified from the source JPEG and from a copy downloaded through the running Docker app.
+
+To verify the event copy:
+
+```sh
+curl -f http://localhost:3000/uploads/stego_challenge.jpg -o stego_challenge.jpg
+steghide extract -sf stego_challenge.jpg -p cosmolog -xf extracted_flag.txt -f
+cat extracted_flag.txt
+```
+
+Expected result: `AstroSec{st3g0_s4t3ll1t3_s3cr3t}`. If the supplied image is lost or damaged, restore it from GitHub or install steghide, ImageMagick, and DejaVu fonts and run `sh scripts/prepare-stego.sh`. The helper preserves a valid existing image and verifies extraction before installing a replacement.
 
 ## Optional investigations
 
@@ -107,7 +117,7 @@ The new social state resides in another in-memory SQLite database, not attached 
 
 ## Guides
 
-- [Setup Guide](Guides/Setup.md): Docker preparation, normal startup, manual stego preparation, readiness checks, navigation, resets, troubleshooting.
+- [Setup Guide](Guides/Setup.md): Docker preparation, normal startup, shipped-image verification and recovery, readiness checks, navigation, resets, troubleshooting.
 - [Hint Book](Guides/Hint%20Book.md): the seven original exercises and four optional investigations.
 - [Staff Guide](Guides/Staff%20Guide.md): credentials, flags, solutions, judging, red-herring explanations, and scoring.
 
@@ -127,6 +137,12 @@ node tests/regression.cjs
 
 Tests start the real server in a temporary directory. They cover all six code-based core solutions; seeded identities across three starts; inflated prior SQLite sequences; cookie/raw/Bearer authentication; SQLi scope; concurrent search; post creation/upload; private-post isolation; likes/bookmarks/reposts; author-only edits/pins; message notifications; replies; normal inbox scoping; intended optional IDOR reads and rejected nonmember writes; optional metadata/Base64/correction evidence; and mission score deduplication.
 
-Additional DOM interaction checks exercised navigation, messaging, flag submission, SQLi results, and theme switching. Full graphical browser launch was blocked by this environment, so desktop/mobile visual QA remains a local follow-up. Docker and the manual core stego image were not executed here. No dependency upgrades or Docker workflow changes were made.
+Additional DOM interaction checks exercised navigation, messaging, flag submission, SQLi results, and theme switching. The Docker validation workflow now builds the existing image, exercises the preserved startup commands, verifies extraction from the HTTP-served stego image, and runs real Chromium desktop/mobile flows. It retains screenshots and container diagnostics as workflow artifacts. See the latest [validation results](https://github.com/test3457890/CTFcosmolog/actions/workflows/lab-validation.yml). Application dependency versions and the user startup workflow remain unchanged.
 
 See [CHANGELOG.md](CHANGELOG.md) for the file-by-file change list.
+
+### Browser and Docker validation
+
+[Docker stego and browser validation](.github/workflows/lab-validation.yml) checks the actual container and supplied image. `tests/browser.cjs` covers sign-in, feed rendering, JPEG loading, SQLi flag separation, chat replies, the intended conversation IDOR, mission submission, diagnostics, theme switching, mobile navigation, and horizontal overflow.
+
+The browser test requires Playwright tooling installed separately from the deliberately vulnerable application dependencies. CI installs that tooling into a temporary directory. `scripts/prepare-stego.sh` is an organizer recovery utility, not a required startup step.

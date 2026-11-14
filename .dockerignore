@@ -5,3 +5,4 @@ Guides
 tests
 database.sqlite*
 *.zip
+artifacts/

@@ -2,7 +2,7 @@
 
 Installation and event operations
 
-Prepare and run the corrected seven-challenge CosmoLog training app. The required startup sequence remains touch database.sqlite followed by docker-compose up -d. This guide covers the current application, including the manually prepared steganography image.
+Prepare and run the corrected seven-challenge CosmoLog training app. The required startup sequence remains touch database.sqlite followed by docker-compose up -d. This guide covers the current application, including the supplied and extraction-verified steganography image.
 
 ## Before you begin
 
@@ -29,7 +29,7 @@ docker-compose up -d
 
 Open http://localhost:3000. Sign in as cyber_newbie with password123. The alternative student account is h4ck3r_man with the same password. For another lab machine, replace localhost with the VM address returned by hostname -I, keeping port 3000.
 
-Do not score Challenge 3 until the image has been created and extraction verified using the instructions below. Application startup alone does not make that challenge ready.
+Before scoring Challenge 3, verify extraction from the included image using the instructions below. Application startup alone does not make that challenge ready.
 
 ## What this release preserves
 
@@ -84,23 +84,22 @@ Confirm Dockerfile, docker-compose.yml, package.json, server.js, public/, etc/, 
 
 Stop the old twitter-clone service with its original Compose file before replacing files. If the old container remains in the same Compose project, run docker-compose up -d --build --remove-orphans once. Normal startup remains docker-compose up -d.
 
-## Prepare the steganography image
+## Verify the supplied steganography image
 
-The project ZIP does not include stego_challenge.jpg. Create it before a scored event. An existing suitable JPEG can be used instead of generating a plain carrier. Embedding changes the image bytes, so perform these steps on the lab copy.
+The repository now includes public/uploads/stego_challenge.jpg with the original Challenge 3 flag embedded using passphrase cosmolog. Normal installation needs no image generation. Before a scored event, verify extraction from a downloaded copy of the supplied image.
 
 ```text
 cd ~/Downloads/cosmolog-clone-ctf
-sudo apt-get install -y steghide imagemagick
-mkdir -p public/uploads
-convert -size 640x480 xc:gray public/uploads/stego_challenge.jpg
+sudo apt-get install -y steghide
+ls -lh public/uploads/stego_challenge.jpg
 ```
 
-Embed the existing Challenge 3 flag with the existing passphrase cosmolog. The temporary hidden file is an organizer setup artifact, not a download for competitors.
+If the supplied JPEG is removed or damaged, scripts/prepare-stego.sh can rebuild it using the unchanged flag and passphrase. This is an organizer recovery step. A valid existing image is kept unchanged.
 
 ```text
-printf '%s\n' 'AstroSec{st3g0_s4t3ll1t3_s3cr3t}' > /tmp/cosmolog-hidden-flag.txt
-steghide embed -cf public/uploads/stego_challenge.jpg \
-  -sf /tmp/cosmolog-hidden-flag.txt -p cosmolog -f
+# Optional recovery only
+sudo apt-get install -y imagemagick fonts-dejavu-core
+sh scripts/prepare-stego.sh
 ```
 
 Start the application, then verify extraction from a downloaded copy. This checks the actual file players receive rather than only the source image.
@@ -115,13 +114,13 @@ steghide extract -sf /tmp/cosmolog-downloaded-stego.jpg \
 cat /tmp/cosmolog-extracted-flag.txt
 ```
 
-Expected result: AstroSec{st3g0_s4t3ll1t3_s3cr3t}. If embedding or extraction fails, resolve it before normal Challenge 3 scoring. A running site or visible JPEG does not prove that the hidden flag can be recovered. The Staff Guide retains the existing judge-discretion fallback.
+Expected result: AstroSec{st3g0_s4t3ll1t3_s3cr3t}. The shipped image has passed steghide extraction both before and after download through the Docker-served application. If a local copy fails extraction, restore the repository version or use the recovery helper before normal Challenge 3 scoring.
 
-After verifying the result, remove the temporary setup and extraction files if they are no longer needed. Do not remove public/uploads/stego_challenge.jpg.
+After verifying the result, remove temporary downloaded and extracted files if no longer needed. Keep public/uploads/stego_challenge.jpg in place.
 
 ### Verification limits
 
-Local regression checks passed for stable IDs, authentication, scoped SQL injection, JWT and admin forgery, command injection, traversal, debug disclosure, posting, and upload. Docker installation, image build, container runtime, and manual stego preparation have not been executed in this review environment. Run the readiness checks on the actual lab VM.
+The regression suite passed. GitHub validation also built the unchanged Dockerfile, started the application using touch database.sqlite followed by docker-compose up -d, and extracted the correct flag from the downloaded JPEG. The validation workflow provides the current desktop and mobile browser test results. Run the event readiness checks on the actual lab VM as well.
 
 ## Run and verify a session
 
@@ -210,7 +209,7 @@ Rebuild server changes with docker-compose up -d --build. public/ is bind mounte
 
 #### Image missing or flag cannot be extracted
 
-Complete and verify the image preparation procedure. Do not count Challenge 3 as ready solely because the app starts.
+Restore the supplied image and verify extraction. Do not count Challenge 3 as ready solely because the app starts.
 
 ## Using the community edition
 
@@ -240,4 +239,4 @@ All social state and submissions reset when the server restarts. Progress follow
 
 Confirm /api/health reports seven core challenges, 1,550 core points, and four optional missions. Verify a reply, a bookmark, a member message, and a flag submission. A duplicate core flag must not add points twice. After a restart, profiles retain stable IDs and social activity returns to the scenario seed.
 
-The core stego JPEG is still prepared manually. The new facility.svg attachment is already supplied and belongs to a separate optional metadata exercise. The basic startup remains touch database.sqlite followed by docker-compose up -d.
+The core stego JPEG is included and verified. The facility.svg attachment belongs to a separate optional metadata exercise. Basic startup remains touch database.sqlite followed by docker-compose up -d.

@@ -123,7 +123,7 @@ How the Vulnerability Works
 
 A JPEG image (stego_challenge.jpg) is posted in the timeline by the Gorgan Solutions account. The flag is embedded inside the image using steghide with a passphrase. Students must download the image and use steghide to extract the hidden file.
 
-Staff setup note: The stego image must be created manually before the CTF. If steghide embed fails on your system, students can be given the flag for this challenge directly, or the challenge can be marked optional.
+Staff setup note: The repository includes the prepared stego JPEG. Its extraction has been verified, including a downloaded copy served by the Docker container. Confirm the same result on the event VM. If the image is missing or damaged, restore it from the repository or run scripts/prepare-stego.sh.
 
 Correct Solution
 
@@ -147,7 +147,7 @@ Judge Verification Steps
 | 3 | Download the image and run steghide extract with passphrase: cosmolog | File extracted successfully |
 | 4 | Read the extracted file | Contains AstroSec{st3g0_s4t3ll1t3_s3cr3t}  -  PASS |
 
-If a competitor cannot extract the flag due to the steghide bug, verify they demonstrated understanding of the steganography concept and accept a manual flag award at judge discretion.
+If extraction fails, compare the downloaded image with the supplied repository file and verify the passphrase cosmolog. Resolve setup problems before scoring. Any exceptional manual award remains at judge discretion and should be recorded.
 
 ## Challenge 4 Privilege Escalation   Forge Admin Access
 
@@ -291,7 +291,7 @@ Judge Verification Steps
 | 3 | Examine the JSON response | Contains user list with hashed passwords and a flag field |
 | 4 | Confirm flag in response | AstroSec{api_info_disclosure_debug_endpoint} visible  -  PASS |
 
-Bonus for competitors: The response also leaks bcrypt hashes. A student who cracks Gorgan Solutions' hash and logs in directly has demonstrated additional skill  -  consider bonus points at judge discretion.
+Additional practice: The response also leaks bcrypt hashes. Cracking Gorgan Solutions’ hash and logging in demonstrates an additional skill. Judges may recognize this work separately; it adds no points to the fixed 1,550-point score.
 
 ## Scoring Summary
 
@@ -320,7 +320,7 @@ Create a local jwt_candidates.txt wordlist that includes sriracha_secret_2024 be
 
 Start from the project directory with touch database.sqlite followed by docker-compose up -d. The service name is cosmolog. Before replacing an older twitter-clone installation, stop it with its original Compose file. After server code changes, rebuild with docker-compose up -d --build. Confirm the original Challenge 1 payload returns the Gorgan flag and no Sriracha flag, then forge id 1 and verify Challenge 2 separately. An attempted UNION of password from users should fail because that column is absent from the search database.
 
-The supplied image remains a manual setup requirement. Verify actual steghide extraction before awarding a normal Challenge 3 completion. Automated local regression tests passed for the six code-based challenges, authentication, repeated restarts, search isolation, posting, and uploads. Docker and the manual stego image were not executable in the review environment.
+The supplied stego image now passes extraction, including a copy downloaded from the Docker-served site. The original Docker startup workflow and the regression suite also passed. Verify the current browser workflow result and run a final event-VM check before competitors begin.
 
 ## Community edition navigation
 
@@ -455,4 +455,4 @@ Only the seven core missions award points. Optional flags mark story completion.
 
 ### Regression checks
 
-Run node tests/regression.cjs with Node.js 18 or newer and installed project dependencies. The tests now cover the 12 seeded accounts, social interactions, private-post visibility, ordinary inbox scoping, the intentional IDOR read, denied nonmember writes, metadata and encoded evidence, and duplicate-score protection. The six code-based core solutions continue to pass. Docker and the manually created JPEG remain local event checks.
+Run node tests/regression.cjs with Node.js 18 or newer and installed project dependencies. The tests now cover the 12 seeded accounts, social interactions, private-post visibility, ordinary inbox scoping, the intentional IDOR read, denied nonmember writes, metadata and encoded evidence, and duplicate-score protection. The six code-based core solutions continue to pass. Docker startup and shipped-JPEG extraction are now automated validation checks. The event host should still run the readiness procedure against its own environment.
