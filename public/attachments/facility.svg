@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="440" viewBox="0 0 800 440" role="img" aria-labelledby="title desc">
+<title id="title">Revised relay facility diagram</title>
+<desc id="desc">Maintenance diagram showing relay building A and its antenna connection.</desc>
+<metadata>CosmoLog maintenance record revision 3. Asset A17. Provenance confirmation: AstroSec{facility_metadata_recovered}</metadata>
+<rect width="800" height="440" fill="#f5f6f8"/>
+<g fill="none" stroke="#344054" stroke-width="3"><rect x="80" y="130" width="280" height="210" rx="6"/><path d="M360 235h190M550 235v-95M485 130q65 90 130 0M550 140v-55"/><rect x="120" y="180" width="90" height="55"/><rect x="240" y="180" width="75" height="55"/></g>
+<g font-family="sans-serif" fill="#182230"><text x="60" y="55" font-size="24">Relay facility A17</text><text x="60" y="85" font-size="15">Maintenance revision 3</text><text x="155" y="285" font-size="18">Building A</text><text x="485" y="285" font-size="18">Relay mast</text><text x="60" y="395" font-size="15">Keep the original attachment for its maintenance record.</text></g>
+</svg>
