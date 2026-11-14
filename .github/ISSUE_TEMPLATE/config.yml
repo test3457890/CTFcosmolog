@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: General questions and feature ideas
+    url: https://github.com/test3457890/CTFcosmolog/discussions
+    about: Ask non-spoiler questions. Never post passwords, flags, vaults, or unlock keys.
+  - name: Setup and VM documentation
+    url: https://github.com/test3457890/CTFcosmolog/blob/main/docs/README.md
+    about: Download instructions, Linux VM setup, app logins, and help routes.

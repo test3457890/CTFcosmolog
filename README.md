@@ -1,6 +1,45 @@
 # CosmoLog CTF
 
-A fictional social-network investigation following Nova on a Journey through the evil.esAI incident. Students follow posts, replies, messages, and original evidence, then finish with a reconstructed operations review.
+A fictional social-network investigation following Nova on a Journey through the evil.esAI incident. Follow community clues, analyze evidence with forensic tools, and finish with Challenge 15 in a reconstructed operations workspace.
+
+[Download ZIP](https://github.com/test3457890/CTFcosmolog/archive/refs/heads/main.zip) · [Setup guide](docs/Setup.md) · [VM guide](docs/Virtual%20Machine.md) · [Documentation hub](docs/README.md) · [Get help](SUPPORT.md)
+
+## Download and start
+
+Inside your prepared Linux VM, with Docker and `docker-compose` installed:
+
+```sh
+git clone https://github.com/test3457890/CTFcosmolog.git
+cd CTFcosmolog
+touch database.sqlite
+docker-compose up -d
+```
+
+Alternatively, download the ZIP above, extract it, and open a terminal in the extracted folder, usually `CTFcosmolog-main`. Then run the same two startup commands. If access is restricted, sign in to an authorized GitHub account first. Do not put a GitHub token in a clone URL or shared command.
+
+Open http://localhost:3000 in the VM browser.
+
+| Login purpose | Username | Password or access method |
+|---|---|---|
+| Student app account | `cyber_newbie` | `password123` |
+| Alternative app account | `h4ck3r_man` | `password123` |
+| Staff document vault | No username | Separate organizer Unlock Key file; never an app password |
+| Linux VM login | Chosen during VM preparation | Set by the VM organizer; not a CosmoLog account |
+
+New to Docker or using Kali/Parrot? Start with the [step-by-step setup guide](docs/Setup.md). To distribute a prepared VM, use the [VM preparation and handoff guide](docs/Virtual%20Machine.md).
+
+## Recommended environment
+
+| Use | Recommendation | Verification |
+|---|---|---|
+| Your preferred all-in-one practice setup | Parrot Security or Kali VM in VirtualBox, with CosmoLog in Docker inside the VM | Setup paths documented; these desktop images have not been tested by this repository's CI |
+| Organizer-controlled event target | Ubuntu 24.04 VM running Docker | Docker/browser CI uses Ubuntu 24.04 runners; verify the actual event VM |
+| Student analysis workstation | Parrot Security or Kali VM with browser and forensic tools | Confirm each required tool and sample file before the event |
+| Windows host | Run the Linux VM in VirtualBox | A Windows-native app installation is not required |
+
+Parrot is a reasonable first choice for your preferred practice image. Kali is another supported preparation path. The app's Node dependencies run inside Docker; Wireshark and other desktop analysis tools run in the VM. VirtualBox and Docker can be used together.
+
+A self-contained practice VM is convenient, but giving someone VM administrator or Docker access also exposes the challenge source and answers. For a scored event, keep the target VM under organizer control and give competitors a separate analysis VM plus the app URL. See the VM guide for both layouts.
 
 ## Current release
 
@@ -11,30 +50,7 @@ A fictional social-network investigation following Nova on a Journey through the
 | Operations capstone | 15 | Final source/evidence/replay review; separate completion |
 | Side stories | Four additional entries | Optional, unscored investigation paths |
 
-There are 15 numbered challenges and four side-story entries, for 19 journal entries. Existing core flags and point values remain unchanged. Forensic and capstone completion do not add to the 1,550-point core total.
-
-## Start the lab
-
-Organizers need Docker and a working `docker-compose` command. From the project directory:
-
-```sh
-touch database.sqlite
-docker-compose up -d
-```
-
-Open http://localhost:3000. Student logins are `cyber_newbie` / `password123` and `h4ck3r_man` / `password123`.
-
-```sh
-docker-compose ps
-docker-compose logs --tail=100 cosmolog
-docker-compose down
-# Rebuild after server code changes:
-docker-compose up -d --build
-```
-
-The service name is `cosmolog`. Every application start resets users, posts, social activity, journal progress, and capstone checkpoints. Uploaded files remain on the host. Shared student accounts share progress; use separate lab instances for independent teams.
-
-This deliberately vulnerable application belongs on an authorized training host. Competitors should receive the running app address and player instructions, rather than the repository, organizer checkout, Docker access, or host filesystem access.
+There are 15 numbered challenges and four side-story entries, for 19 journal entries. Original flags and scoring are preserved. Starting the server resets social progress and capstone checkpoints; uploaded files persist. Shared accounts share progress. Use independent lab instances for independent teams.
 
 ## What students see
 

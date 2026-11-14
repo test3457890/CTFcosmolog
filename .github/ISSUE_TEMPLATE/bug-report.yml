@@ -1,0 +1,32 @@
+name: "Bug report"
+description: "Report a reproducible application or documentation problem."
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include flags, answers, staff credentials, vaults, unlock keys, personal tokens, or unreviewed screenshots/logs. This form is not a private support channel."
+  - type: input
+    id: environment
+    attributes:
+      label: Operating system and layout
+      placeholder: "Parrot VM in VirtualBox; Docker inside the VM"
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Docker and Compose versions
+      description: "Paste version output only, without credentials."
+  - type: textarea
+    id: steps
+    attributes:
+      label: What did you try?
+      description: "Include commands or UI steps without secrets or challenge solutions."
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected result and actual result
+      description: "Include a short sanitized error. Say whether the app works inside the VM."
+    validations:
+      required: true

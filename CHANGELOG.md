@@ -21,3 +21,20 @@ The community includes 12 fictional profiles, 92 additional posts, 39 replies, e
 | tests/regression.cjs | Check removed staff-document paths are unavailable through ordinary web/static requests while keeping challenge regression coverage. |
 
 Full historical technical notes are preserved in the offline staff package. This current-branch cleanup does not erase public Git history or copies already downloaded elsewhere. See DOCUMENTATION.md.
+
+## Download VM and support documentation
+
+| File | Change and reason |
+|---|---|
+| README.md | Lead with download/start instructions, correct login distinctions, recommended VM layouts, and links to setup/help. |
+| docs/README.md | Add a wiki-style documentation hub with task-based links. |
+| docs/Setup.md | Add Linux Docker/Compose preparation, Git/ZIP download, startup, tool checks, and troubleshooting. |
+| docs/Virtual Machine.md | Document Parrot/Kali practice VMs, Ubuntu targets, VirtualBox plus Docker, networking, export/handoff checks, and source-access limitations. |
+| docs/Access.md | Explain app, VM, GitHub, and staff-vault access separately; describe local vault opening and private access requests. |
+| SUPPORT.md | Add setup questions, bug reporting, maintainer contact, and private staff-access guidance without publishing credentials. |
+| .github/ISSUE_TEMPLATE/config.yml | Route general questions to Discussions and setup documentation. |
+| .github/ISSUE_TEMPLATE/setup-help.yml and bug-report.yml | Add structured support forms that request useful diagnostics and exclude secrets/answers. |
+| scripts/check-setup.sh | Add a non-mutating Docker/Compose/app-health and optional analysis-tool availability check. |
+| CHANGELOG.md | Record the onboarding and support changes. |
+
+No challenge, flag, point value, application dependency, or Docker startup command changed. No prebuilt OVA is shipped or claimed; VM preparation remains an organizer procedure.
