@@ -217,7 +217,7 @@ The seven core exercises still total 1,550 points. Four optional investigations 
 
 ### Home and profiles
 
-Home has For you and Following feeds. Twelve profiles and 36 additional story posts provide context. Like, reply, follow, bookmark, or open a timestamp to view a post conversation. Initials avatars avoid missing profile image dependencies.
+Home has For you and Following feeds. Twelve profiles and 84 additional story posts provide context. Like, reply, follow, bookmark, or open a timestamp to view a post conversation. Initials avatars avoid missing profile image dependencies.
 
 ### Explore and private accounts
 

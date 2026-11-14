@@ -9,7 +9,7 @@ The attachment-based corrected project replaces the older GitHub upload. The sev
 | `server.js` | Apply the requested stable-ID, Bearer-token, and scoped SQLi fixes; wait for deterministic seeding before listening; load the community module; create the upload directory; prevent private posts on public accounts from leaking to other identities. Existing core challenge endpoints remain. |
 | `sqlite.js` | Promise wrappers for ordered SQLite initialization and social queries. |
 | `social.js` | Social feeds, reactions, reposts, author-only edits/pins, bookmarks, follows, replies, inboxes, membership-checked writes, notifications, optional conversation IDOR, and mission submission/progress. Social state is an unattached in-memory database. |
-| `story.js` | Eight additional fictional users, 36 story posts, seven seeded replies, six ordinary inbox conversations, one restricted operations conversation, and resolvable red herrings. |
+| `story.js` | Eight additional fictional users, 84 story posts, 31 seeded replies, six ordinary inbox conversations, one restricted operations conversation, and resolvable red herrings. |
 | `public/index.html` | Social application shell with Home, Explore, Messages, Notifications, Bookmarks, Profile, Mission journal, and Station tools. |
 | `public/app.js` | Navigation, safe text rendering, forms, interactions, per-post links, challenge tools, flag submission, and theme control. |
 | `public/style.css` | Responsive social layout, light/dark themes, initials avatars, conversation and mission views, and keyboard focus states. |
@@ -46,3 +46,12 @@ Only the seven core missions award points. Duplicate submissions do not add poin
 The isolated search snapshot cannot retrieve Sriracha posts or password hashes. The new social database is not attached to that snapshot. The single vulnerable server still permits intentional command execution and traversal, so source inspection and cross-challenge shortcuts remain possible. Conversation 407 deliberately lacks a read membership check; writing still requires membership.
 
 Passed: JavaScript syntax, the expanded real-server regression suite, DOM interactions, the original Docker build/startup workflow, extraction from the supplied and HTTP-served JPEG, and real Chromium desktop/mobile flows. Captured light/dark desktop and mobile screens were visually reviewed. All updated Word guides were rendered and reviewed. The Node regression suite also checks that the served JPEG matches the included file. The validation workflow uses Ubuntu 24.04 for compatibility with its pinned browser tooling, installed separately from the application dependencies. Run the documented readiness checks on the actual event host before competitors begin.
+
+## Community content expansion
+
+| File | Change and reason |
+|---|---|
+| `story.js` | Add 48 politically neutral, age-appropriate everyday posts and 24 replies in eight connected threads. Give each account a recognizable voice and include follow-ups without adding flags or changing existing evidence. |
+| `README.md` | Update content counts and describe the new community conversations and audience expectations. |
+| `Guides/CosmoLog Setup Guide.docx` and `Guides/Setup.md` | Update the seeded post count to 84. Startup, challenge instructions, flags, and scoring are unchanged. |
+| `CHANGELOG.md` | Record the content expansion and every file changed for it. |

@@ -85,4 +85,329 @@ const threads = [
   {user:1,text:'The receipt was misdelivered. Why does the conversation API accept any authenticated reader?'},
   {user:2,text:'Handler archive confirmation: AstroSec{handler_thread_recovered}.'}]}
 ];
+// Ordinary community life. These posts and replies add context, not challenge flags.
+posts.push(...[
+  {
+    "user": 7,
+    "key": "walk_welcome",
+    "text": "New to the station? Join our short observation-loop walk. We pause at every window, and nobody has to keep up with a fast group. #MoonwalkClub"
+  },
+  {
+    "user": 10,
+    "key": "soup_vote",
+    "text": "Soup taste test at lunch: tomato or vegetable? Both come with the same extremely serious feedback form. #StationKitchen"
+  },
+  {
+    "user": 9,
+    "key": "coop_night",
+    "text": "Co-op night has a beginner table now. We explain the controls before starting, and helping a teammate counts as a win. #GameNight"
+  },
+  {
+    "user": 8,
+    "key": "plant_shelf",
+    "text": "The maintenance shelf has become a plant shelf. Please label your seedlings so I stop calling all of them Basil. #StationGarden"
+  },
+  {
+    "user": 5,
+    "key": "shift_tea",
+    "text": "Quiet start to the shift: tea, checklist, then messages. In that order, unless someone has borrowed my mug again. #StationLife"
+  },
+  {
+    "user": 6,
+    "key": "window_photo",
+    "text": "Observation window photo challenge: capture the same view at three different times. Please leave the walkway clear. #OrbitPhotos"
+  },
+  {
+    "user": 11,
+    "key": "archive_first",
+    "text": "Found the first community newsletter in the archive. Its biggest story was the arrival of a second toaster. Progress takes many forms. #ArchiveNotes"
+  },
+  {
+    "user": 12,
+    "key": "nova_sketch",
+    "text": "Nova journal: tried sketching the observation deck. The windows look convincing. The chairs look like small satellites. #CreativeCorner"
+  },
+  {
+    "user": 7,
+    "text": "We finished the short loop with two photo stops and one very long discussion about constellations. Good company beats a fast time. #MoonwalkClub"
+  },
+  {
+    "user": 10,
+    "text": "Lunch results: tomato and vegetable tied. The kitchen has requested a rematch after everyone washes their bowls. #StationKitchen"
+  },
+  {
+    "user": 9,
+    "text": "First beginner game night complete. Our best move was reading the instructions together. Same time next week. #GameNight"
+  },
+  {
+    "user": 8,
+    "text": "Plant update: three seedlings are labeled Basil, but only one actually is. The labels are a gardening problem, not a secret message. #StationGarden"
+  },
+  {
+    "user": 5,
+    "text": "Thank you to the day crew for leaving a clear handover note. A useful checklist is an underrated kindness. #StationLife"
+  },
+  {
+    "user": 6,
+    "text": "Photo tip from yesterday: reflections can be interesting too. Ask before including another person in a picture. #OrbitPhotos"
+  },
+  {
+    "user": 11,
+    "text": "The old newsletter now has a readable transcript. Searchable text makes a small archive much easier to explore. #ArchiveNotes"
+  },
+  {
+    "user": 12,
+    "text": "Nova journal: learned three new names on the walk and remembered two. Working on the third. #StationLife"
+  },
+  {
+    "user": 7,
+    "text": "Club route suggestion box is open. Short routes, seated observation sessions, and longer walks are all welcome. #MoonwalkClub"
+  },
+  {
+    "user": 10,
+    "text": "Someone returned six missing teaspoons. No questions asked. The kitchen considers this an excellent day. #StationKitchen"
+  },
+  {
+    "user": 9,
+    "text": "Tonight we are trying a cooperative building game. My plan is a neat little station. My last attempt was mostly corridors. #GameNight"
+  },
+  {
+    "user": 8,
+    "text": "Repair table on the recreation deck: bring a loose notebook cover or a wobbly desk organizer. Leave station equipment to the maintenance team. #FixItHour"
+  },
+  {
+    "user": 5,
+    "text": "Reminder to future me: lunch belongs on the calendar too. A completed checklist does not make a sandwich appear. #StationLife"
+  },
+  {
+    "user": 6,
+    "text": "Photo challenge entries include a crescent moon, a bright cloud band, and one excellent picture of a snack reflection. #OrbitPhotos"
+  },
+  {
+    "user": 11,
+    "text": "Archive question of the day: what ordinary thing would you save for the next crew? I vote for a recipe and a handwritten welcome note. #ArchiveNotes"
+  },
+  {
+    "user": 12,
+    "text": "Nova journal: a quiet feed update can just be a quiet feed update. Today I am bookmarking the bread recipe. #StationLife"
+  },
+  {
+    "user": 7,
+    "text": "Our next walk ends at the library corner. Bring a book recommendation if you have one. Listening is welcome too. #MoonwalkClub"
+  },
+  {
+    "user": 10,
+    "text": "Kitchen experiment: herb bread. The smell has already received positive reviews from people who have not tasted it yet. #StationKitchen"
+  },
+  {
+    "user": 9,
+    "text": "We built the game station. It has a library, a garden, and only slightly too many corridors. Calling that an improvement. #GameNight"
+  },
+  {
+    "user": 8,
+    "text": "Repair table success: two notebook covers, one pencil case, and a desk organizer that now stands straight. Thanks for sharing supplies. #FixItHour"
+  },
+  {
+    "user": 5,
+    "text": "The lost mug is back on my desk. Someone also left a small drawing of it with a return-to-owner label. Excellent service. #StationLife"
+  },
+  {
+    "user": 6,
+    "text": "Community photo album is ready. Captions include the place and time so the next crew can find the same view. #OrbitPhotos"
+  },
+  {
+    "user": 11,
+    "text": "Today I archived a handwritten bread recipe. It has three flour smudges and an important note: let it cool before slicing. #ArchiveNotes"
+  },
+  {
+    "user": 12,
+    "text": "Nova journal: the best question at the repair table was, \"Can you show me how?\" Keeping that one. #CreativeCorner"
+  },
+  {
+    "user": 7,
+    "text": "Cloud-watching session this weekend. No special knowledge needed. We will compare shapes and probably disagree about which one looks like a turtle. #WindowClub"
+  },
+  {
+    "user": 10,
+    "text": "Herb bread review: good crust, soft middle, gone before I could take a picture. Recipe is with signal_archive. #StationKitchen"
+  },
+  {
+    "user": 9,
+    "text": "Game-night etiquette: explain a rule kindly, make room for a new player, and let people finish their turn. #GameNight"
+  },
+  {
+    "user": 8,
+    "text": "The garden shelf has its first new leaf. This is a completely ordinary leaf, but I am still giving it a progress update. #StationGarden"
+  },
+  {
+    "user": 5,
+    "text": "Off-shift reading recommendation: a field guide with pictures. Sometimes I want a page that does not need a status update. #LibraryCorner"
+  },
+  {
+    "user": 6,
+    "text": "Photo challenge closing note: everyone who submitted gets a place in the album. We are collecting perspectives, not choosing a winner. #OrbitPhotos"
+  },
+  {
+    "user": 11,
+    "text": "A good archive entry names its source. For recipes, that also means giving credit to the person who did the washing up. #ArchiveNotes"
+  },
+  {
+    "user": 12,
+    "text": "Nova journal: asked three people for their favorite station view. Got three different answers and one invitation to see the garden. #StationLife"
+  },
+  {
+    "user": 7,
+    "text": "The library walk had a very good turnout. Next time we will leave extra time for recommendations at the end. #MoonwalkClub"
+  },
+  {
+    "user": 10,
+    "text": "Official kitchen announcement: the spare teaspoons are in the drawer labeled teaspoons. We are trying a bold new organization system. #StationKitchen"
+  },
+  {
+    "user": 9,
+    "text": "Looking for recommendations for a short, friendly game we can finish in one evening. Bonus appreciation for clear instructions. #GameNight"
+  },
+  {
+    "user": 8,
+    "text": "Garden watering chart is beside the shelf. Please mark a watering after you do it so the plants do not receive eight enthusiastic drinks. #StationGarden"
+  },
+  {
+    "user": 5,
+    "text": "Small win: finished the shift with every borrowed pen returned. I am choosing to believe this can happen twice. #StationLife"
+  },
+  {
+    "user": 6,
+    "text": "Next community challenge: write a two-sentence caption for a favorite view. No photo required. Descriptions count too. #CreativeCorner"
+  },
+  {
+    "user": 11,
+    "text": "Newsletter draft now includes the garden, game night, and the returned teaspoons. A well-rounded historical record. #ArchiveNotes"
+  },
+  {
+    "user": 12,
+    "text": "Nova journal: there is still an investigation to finish, but people are also growing plants and sharing lunch. The station is more than its incident reports. #StationLife"
+  }
+]);
+replies.push(...[
+  {
+    "user": 5,
+    "post": "walk_welcome",
+    "text": "I can join the shorter route after my shift. Is the meeting point still the library corner?"
+  },
+  {
+    "user": 7,
+    "post": "walk_welcome",
+    "text": "Yes, library corner. We will post the route there before we leave."
+  },
+  {
+    "user": 12,
+    "post": "walk_welcome",
+    "text": "I will bring my sketchbook. A window stop sounds like a good place to practice."
+  },
+  {
+    "user": 7,
+    "post": "soup_vote",
+    "text": "Vegetable gets my vote. Can we keep the recipe if it wins?"
+  },
+  {
+    "user": 10,
+    "post": "soup_vote",
+    "text": "Absolutely. Both recipes will go in the community folder, regardless of the vote."
+  },
+  {
+    "user": 11,
+    "post": "soup_vote",
+    "text": "Happy to keep a copy with the newsletter recipes."
+  },
+  {
+    "user": 12,
+    "post": "coop_night",
+    "text": "I have not played before. Is it all right to watch the first round?"
+  },
+  {
+    "user": 9,
+    "post": "coop_night",
+    "text": "Of course. You can watch, join, or leave between rounds. We will explain as we go."
+  },
+  {
+    "user": 5,
+    "post": "coop_night",
+    "text": "I will take the beginner table too. My last game strategy was pressing every button."
+  },
+  {
+    "user": 10,
+    "post": "plant_shelf",
+    "text": "I can donate a clean container for the next seedling."
+  },
+  {
+    "user": 8,
+    "post": "plant_shelf",
+    "text": "Thanks. Bring it to the recreation shelf and we will check the drainage together."
+  },
+  {
+    "user": 7,
+    "post": "plant_shelf",
+    "text": "The walk group would like a garden update at our next stop."
+  },
+  {
+    "user": 8,
+    "post": "shift_tea",
+    "text": "Your mug is on the drying rack. It was helping me finish a very long cup of tea."
+  },
+  {
+    "user": 5,
+    "post": "shift_tea",
+    "text": "Mystery solved. Please leave it there and I will collect it after handover."
+  },
+  {
+    "user": 10,
+    "post": "shift_tea",
+    "text": "Adding a spare-mug shelf to the kitchen suggestions."
+  },
+  {
+    "user": 12,
+    "post": "window_photo",
+    "text": "Does a drawing of the same view count? My camera is not doing the colors justice."
+  },
+  {
+    "user": 6,
+    "post": "window_photo",
+    "text": "Yes. Photos, drawings, and written descriptions are all welcome."
+  },
+  {
+    "user": 7,
+    "post": "window_photo",
+    "text": "I can contribute three descriptions of the same cloud slowly becoming a turtle."
+  },
+  {
+    "user": 9,
+    "post": "archive_first",
+    "text": "Did the first toaster get a farewell article when the second one arrived?"
+  },
+  {
+    "user": 11,
+    "post": "archive_first",
+    "text": "It stayed in service. The newsletter called the pair an expanded breakfast program."
+  },
+  {
+    "user": 10,
+    "post": "archive_first",
+    "text": "An important chapter in station kitchen history."
+  },
+  {
+    "user": 11,
+    "post": "nova_sketch",
+    "text": "Please keep the date with the sketch. The chairs may look different to the next crew."
+  },
+  {
+    "user": 12,
+    "post": "nova_sketch",
+    "text": "Dated and saved. Future historians can decide whether the chairs were really that round."
+  },
+  {
+    "user": 8,
+    "post": "nova_sketch",
+    "text": "As the person who tightens those chairs, I support the artistic interpretation."
+  }
+]);
 module.exports={people,posts,replies,threads};

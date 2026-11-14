@@ -27,7 +27,7 @@ Use an authorized training VM/network. The core command execution and file trave
 
 - Home feed with For you and Following tabs.
 - Twelve fictional profiles with bios, initials avatars, and follower counts.
-- Thirty-six additional story posts, seven seeded replies, and ordinary life alongside incident clues.
+- Eighty-four additional story posts, 31 seeded replies, and ordinary life alongside incident clues.
 - Likes, reposts, threaded replies, bookmarks, follows, individual post links, author-only editing, and pinned posts.
 - Six normal inbox conversations for each student account, plus a restricted operations thread that supports an optional IDOR exercise.
 - Message replies and linked notifications, a persistent light/dark preference, and responsive layouts.
@@ -75,6 +75,12 @@ These add story progress, not points. Each has an AstroSec{} flag and matching h
 | side4 | Encoded side conversation | Decode the Base64 maintenance record in conversation 102. Base64 is encoding, not encryption. |
 
 Red herrings are documented, bounded, and explainable: the retired relay, the game-night shifted text, and cafeteria outages. Each has nearby context resolving the confusion. Club and support conversations provide ordinary background rather than endless dead ends.
+
+## Community content
+
+The expanded community adds 48 ordinary posts and 24 replies across the eight fictional community accounts. Connected threads cover welcoming new arrivals, accessible club walks, cooking, cooperative games, gardening, photography, art, and station history. Follow-up posts carry these conversations forward. Existing incident clues and resolvable false leads remain in their original threads.
+
+Content is intended for student audiences: respectful humor, no real political positions or public figures, and no graphic violence, sexual content, substance use, or gambling. The new everyday conversations contain no flags and add no scored tasks. The original seven challenges still total 1,550 points, with four existing unscored investigations.
 
 ## Stable identities and resets
 
