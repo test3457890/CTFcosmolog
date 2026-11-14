@@ -4,3 +4,13 @@ database.sqlite-journal
 database.sqlite-wal
 database.sqlite-shm
 artifacts/
+
+# Organizer-only materials never belong in this checkout or image.
+private-staff/
+staff-private/
+*Staff*Vault*
+*Staff*Unlock*
+*Staff*Documents*
+*.staffvault
+*.key
+*.pem

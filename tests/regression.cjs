@@ -67,6 +67,7 @@ async function stop() {
   assert.equal((await request('/login.html')).status, 200);
   assert.equal((await request('/style.css')).status, 200);
   assert.equal((await request('/app.js')).status,200);
+  for(const url of ['/Guides/Staff%20Guide.md','/Guides/CosmoLog%20Staff%20Guide.docx','/README.md','/DOCUMENTATION.md','/private-staff/CosmoLog%20Staff%20Vault.html'])assert.equal((await request(url)).status,404);
   const shippedImage=fs.readFileSync(path.join(root,'public/uploads/stego_challenge.jpg'));
   assert(shippedImage.length>1000);
   const imageDownload=await request('/uploads/stego_challenge.jpg');assert.equal(imageDownload.status,200);

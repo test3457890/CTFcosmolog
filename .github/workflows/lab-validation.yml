@@ -47,6 +47,15 @@ jobs:
             sleep 2
           done
           test "$ready" = 1
+          docker-compose exec -T cosmolog sh -ec '
+            test ! -e /app/Guides
+            test ! -e /app/tests
+            test ! -e /app/README.md
+            test ! -e /app/DOCUMENTATION.md
+            test ! -e /app/private-staff
+            test ! -e /app/.git
+          '
+
           curl -fsS http://127.0.0.1:3000/uploads/stego_challenge.jpg -o /tmp/downloaded-stego.jpg
           steghide extract -sf /tmp/downloaded-stego.jpg -p cosmolog -xf /tmp/downloaded-flag.txt -f
           printf '%s\n' 'AstroSec{st3g0_s4t3ll1t3_s3cr3t}' > /tmp/expected-flag.txt

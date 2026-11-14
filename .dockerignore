@@ -8,3 +8,17 @@ database.sqlite*
 artifacts/
 
 !public/attachments/cases/*.zip
+
+# Organizer-only materials never belong in this checkout or image.
+private-staff/
+staff-private/
+*Staff*Vault*
+*Staff*Unlock*
+*Staff*Documents*
+*.staffvault
+*.key
+*.pem
+
+*.md
+*.docx
+*.pdf

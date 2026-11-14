@@ -1,192 +1,65 @@
 # CosmoLog CTF
 
-A deliberately vulnerable, fictional social network for the evil.esAI incident and Nova on a Journey. The seven core challenges and their existing AstroSec{} flags still total 1,550 points. Four optional investigations are unscored.
+A fictional social-network investigation following Nova on a Journey through the evil.esAI incident. Students follow posts, replies, messages, and original evidence, then finish with a reconstructed operations review.
 
-## Start
+## Current release
 
-From this repository's root, with Docker and a working `docker-compose` command installed:
+| Track | Challenges | Result |
+|---|---|---|
+| Web investigation | 1–7 | Original seven challenges; 1,550 total points |
+| Offline forensics | 8–14 | Seven tool-based cases; separate completion |
+| Operations capstone | 15 | Final source/evidence/replay review; separate completion |
+| Side stories | Four additional entries | Optional, unscored investigation paths |
+
+There are 15 numbered challenges and four side-story entries, for 19 journal entries. Existing core flags and point values remain unchanged. Forensic and capstone completion do not add to the 1,550-point core total.
+
+## Start the lab
+
+Organizers need Docker and a working `docker-compose` command. From the project directory:
 
 ```sh
 touch database.sqlite
 docker-compose up -d
 ```
 
-Open http://localhost:3000. Student accounts: `cyber_newbie` / `password123` and `h4ck3r_man` / `password123`.
+Open http://localhost:3000. Student logins are `cyber_newbie` / `password123` and `h4ck3r_man` / `password123`.
 
 ```sh
-docker-compose logs -f cosmolog
+docker-compose ps
+docker-compose logs --tail=100 cosmolog
 docker-compose down
+# Rebuild after server code changes:
 docker-compose up -d --build
 ```
 
-Stop an old `twitter-clone` service using its old Compose file before replacing the project. If an orphan container remains in the same Compose project, run `docker-compose up -d --build --remove-orphans` once.
+The service name is `cosmolog`. Every application start resets users, posts, social activity, journal progress, and capstone checkpoints. Uploaded files remain on the host. Shared student accounts share progress; use separate lab instances for independent teams.
 
-Use an authorized training VM/network. The core command execution and file traversal are intentional, and the code and staff guides contain solutions. This is not a production social platform or a competition-grade identity system.
+This deliberately vulnerable application belongs on an authorized training host. Competitors should receive the running app address and player instructions, rather than the repository, organizer checkout, Docker access, or host filesystem access.
 
-## Community experience
+## What students see
 
-- Home feed with For you and Following tabs.
-- Twelve fictional profiles with bios, initials avatars, and follower counts.
-- Ninety-two additional story posts, 39 seeded replies, and ordinary life alongside incident clues.
-- Likes, reposts, threaded replies, bookmarks, follows, individual post links, author-only editing, and pinned posts.
-- Six normal inbox conversations for each student account, plus a restricted operations thread that supports an optional IDOR exercise.
-- Message replies and linked notifications, a persistent light/dark preference, and responsive layouts.
-- A mission journal with server-checked flags, duplicate-submission protection, optional hints, and core progress out of 1,550.
-- Station tools for the existing diagnostics, control panel, and mission-brief download.
+- A responsive community feed with 12 fictional profiles, 92 additional story posts, and 39 seeded replies.
+- Likes, reposts, follows, bookmarks, threaded replies, profile pages, notifications, and six ordinary inbox conversations per student account.
+- Age-appropriate, politically neutral station life alongside incident reports and explainable false leads.
+- Case files with original downloads, byte counts, and SHA-256 hashes.
+- A filtered Mission journal with progressive hints and duplicate-submission protection.
+- An Operations console with searchable source snapshots, request replay, evidence history, and a final finding.
+- Light/dark themes and desktop/mobile layouts.
 
-The social interface renders submitted text as text. Stored XSS is not one of the seven core challenges. Ordinary social routes enforce private-post access and write permissions; the one intentionally vulnerable conversation read is documented below.
+## Analysis tools
 
-## Core challenges
+Wireshark or TShark, ExifTool, DB Browser for SQLite or sqlite3, Autopsy or The Sleuth Kit, an archive viewer, and a text editor or timeline tool support the forensic sequence. Students inspect supplied fictional captures and records; live network capture is not required. Analysis tools are installed separately from the app.
 
-| # | Challenge | Points | Entry point |
-|---|---|---:|---|
-| 1 | SQL injection | 100 | Explore → Search Users; `/api/users/search?q=...` |
-| 2 | JWT forgery | 200 | Sriracha profile; `/api/user/1` |
-| 3 | Steganography | 200 | Gorgan's satellite image; `/uploads/stego_challenge.jpg` |
-| 4 | Privilege escalation | 300 | Station tools; `/api/admin/satellite-control` |
-| 5 | Command injection | 300 | Station tools; POST `/api/satellite/ping` |
-| 6 | File inclusion and traversal | 300 | Station tools; `/api/download?file=...` |
-| 7 | API disclosure | 150 | `/api/debug/dump` |
-| | Total | 1,550 | |
+## Documentation and access
 
-### Challenge 3 is included
+[Player Guide](Guides/Player%20Guide.md) contains navigation and evidence-handling instructions without staff answers.
 
-`public/uploads/stego_challenge.jpg` is now shipped with the existing flag and passphrase `cosmolog`. Normal setup no longer requires creating the image. Extraction was verified from the source JPEG and from a copy downloaded through the running Docker app.
+The full Word Setup and Learning Guide, Hint Book, Staff Guide, and solution-bearing technical reference are distributed separately in an encrypted offline staff vault. They are intentionally absent from this checkout and the application image. Keep the vault, unlock key, decrypted ZIP, and extracted documents off the lab host and outside participant materials. No staff-document password is stored in CosmoLog.
 
-To verify the event copy:
+Source, tests, evidence builders, previous commits, and workflow artifacts can reveal answers. Removing current guide files does not remove earlier public copies. Restrict repository visibility and access before an event; a public source repository cannot conceal its challenge answers. The current source distribution is organizer material, not a competitor bundle.
 
-```sh
-curl -f http://localhost:3000/uploads/stego_challenge.jpg -o stego_challenge.jpg
-steghide extract -sf stego_challenge.jpg -p cosmolog -xf extracted_flag.txt -f
-cat extracted_flag.txt
-```
-
-Expected result: `AstroSec{st3g0_s4t3ll1t3_s3cr3t}`. If the supplied image is lost or damaged, restore it from GitHub or install steghide, ImageMagick, and DejaVu fonts and run `sh scripts/prepare-stego.sh`. The helper preserves a valid existing image and verifies extraction before installing a replacement.
-
-## Optional investigations
-
-These add story progress, not points. Each has an AstroSec{} flag and matching hint/judge documentation.
-
-| ID | Investigation | Skill and evidence |
-|---|---|---|
-| side1 | Misdelivered receipt | Read the wrong-recipient receipt in inbox conversation 104, then investigate `/api/social/conversations/407`. Reads intentionally omit a membership check. Writes still require membership. |
-| side2 | The retired relay | Compare the archived relay post and Mira's correction in its replies. The retired KRONOS-6 address is a resolvable false lead. |
-| side3 | Carrier provenance | Download `/attachments/facility.svg` and inspect its XML metadata. This is a separate artifact from the core stego JPEG. |
-| side4 | Encoded side conversation | Decode the Base64 maintenance record in conversation 102. Base64 is encoding, not encryption. |
-
-Red herrings are documented, bounded, and explainable: the retired relay, the game-night shifted text, and cafeteria outages. Each has nearby context resolving the confusion. Club and support conversations provide ordinary background rather than endless dead ends.
-
-## Community content
-
-The expanded community adds 48 ordinary posts and 24 replies across the eight fictional community accounts. Connected threads cover welcoming new arrivals, accessible club walks, cooking, cooperative games, gardening, photography, art, and station history. Follow-up posts carry these conversations forward. Existing incident clues and resolvable false leads remain in their original threads.
-
-Content is intended for student audiences: respectful humor, no real political positions or public figures, and no graphic violence, sexual content, substance use, or gambling. The new everyday conversations contain no flags and add no scored tasks. The original seven challenges still total 1,550 points, with four existing unscored investigations.
-
-## Seven offline forensic cases
-
-Open Case files for original evidence, file sizes, and SHA-256 hashes. Follow #CaseFiles posts and the Maintenance crew conversation to understand each acquisition. Mission journal has Core, Forensics, and Side stories tabs; forensic cases offer three progressive hints. Preserve the original downloads and analyze copies with local tools. No live network capture is required.
-
-| Case | Tools | What students must demonstrate |
-|---|---|---|
-| The missing transfer | Wireshark or TShark; archive viewer | Reassemble/export an HTTP object and distinguish the accepted receipt from a cancelled transfer. |
-| The quiet resolver | Wireshark or TShark; hex decoder | Filter DNS questions, remove retries, reorder numbered fragments, and decode a record. |
-| The original frame | ExifTool; Base64 decoder | Compare original and preview metadata and recover an encoded survey annotation. |
-| The incomplete checkpoint | DB Browser for SQLite or sqlite3 | Preserve a WAL sidecar and recover committed state absent from a baseline-only database. |
-| The removed handoff | Autopsy or The Sleuth Kit | Identify a deleted FAT12 entry and recover its content from a raw disk image. |
-| The accepted message | Email viewer or Python email parser | Correlate Message-ID with a gateway disposition and decode the correct MIME attachment. |
-| The three clocks | Timeline Explorer, spreadsheet, or Python | Normalize timestamp offsets, correlate request/session IDs, and exclude rejected events and drills. |
-
-These seven cases form a separate unscored completion track. The original seven core exercises retain their flags and 1,550-point total, and the four earlier side investigations remain available. Together with Challenge 15 below, there are 19 journal entries: 15 numbered challenges and four side stories. The evidence uses fictional records, documentation IP addresses, and .test domains. Student analysis tools are installed separately; the application dependencies and startup commands are unchanged.
-
-Harder cases require corroboration or reconstruction, rather than obscure passwords. The accepted receipt is R-314, identified in crew chat. A cancelled receipt, stripped preview, database checkpoint, and successful drill each have evidence explaining why they are insufficient. Source inspection and the app's intentional command execution can still bypass the intended learning paths; staff should ask students to explain their method.
-
-`public/attachments/cases/manifest.json` records evidence hashes. `scripts/build-forensics.py` rebuilds the fictional acquisitions using Python and Pillow; rebuilding is an organizer task and can change acquisition bytes and hashes. Ship and verify the manifest with its corresponding artifacts. The application never generates evidence during startup.
-
-The Forensic evidence validation workflow solves the shipped files using real tools. To run it on an analysis workstation with TShark, ExifTool, The Sleuth Kit, and Python installed:
-
-```sh
-python3 tests/forensics.py
-```
-
-## Challenge 15 The compatibility exception
-
-Operations console reconstructs a fictional relay backend with Source, Replay, Evidence, and Finding tabs. Students review deployment settings, source imports, effective identity, and logs; compare them with an archived admin function and sample credentials; then demonstrate the actual access-control flaw and its remediation.
-
-The live modeled issue is a compatibility override that promotes a verified analyst when it sees caller-controlled input. The historical function and documentation credentials are inactive alternatives. Students must record a denied baseline, reproduce archive access with corroborated receipt/session/relay evidence, and show that the same request is denied by the patch preview. The final finding identifies the loaded source, trust failure, effective fix, and inactive alternative. Only then is the capstone flag returned; copied flags cannot complete the journal without that account's report checkpoint.
-
-The Evidence tab shows the 14 earlier numbered challenges, their learning objectives, and whether this account recorded a flag. It does not claim a student used a particular tool. Earlier completion is not a prerequisite for opening the final review. Challenges 1–7 retain their 1,550 points, challenges 8–14 are the seven forensic cases, and challenge 15 is the capstone. The four side stories are separate. Forensic and capstone completion remain unscored.
-
-Displayed source is text, never evaluated. The replay model accepts only listed routes and bounded inputs; it makes no outbound requests and changes no real management service. Replay/report checkpoints are per account and reset with the lab. The original web vulnerabilities and public source still permit shortcuts outside this controlled learning path, so staff should review the student's explanation.
-
-## Stable identities and resets
-
-| ID | Username |
-|---:|---|
-| 1 | Sriracha |
-| 2 | Gorgan Solutions |
-| 3 | cyber_newbie |
-| 4 | h4ck3r_man |
-| 5 | mira_ops |
-| 6 | relay_watch |
-| 7 | lunar_strider |
-| 8 | patch_notes |
-| 9 | orbital_gamer |
-| 10 | cafeteria_comet |
-| 11 | signal_archive |
-| 12 | nova_fieldnotes |
-
-Every application start clears and reseeds users and posts, resets SQLite sequences, and recreates social state. Initialization finishes before accepting requests. Likes, replies, follows, messages, notifications, and mission submissions reset with the lab. Uploaded files remain in bind-mounted `public/`. `docker-compose down -v` does not delete the host database file.
-
-Mission progress follows the active JWT account. Forging or switching an identity changes whose journal is displayed. The existing weak JWT scheme deliberately remains part of the lab, so the journal is a learning aid, not a trustworthy external leaderboard. All participants sharing a student account also share its social state and progress. Use separate lab instances when teams need independent sessions.
-
-The old `seed.js` remains an optional legacy decoy helper. The server now seeds the full community itself; running that helper separately is unnecessary and can add duplicate story content.
-
-## Authentication and challenge scope
-
-Protected endpoints accept a `token` cookie, a raw JWT Authorization header, or `Authorization: Bearer <token>`. Prefix matching is case insensitive. The cookie takes precedence. Missing or invalid tokens still redirect to `/login.html`. Refresh after replacing a cookie, especially when changing the displayed account.
-
-The intentionally weak secret remains `sriracha_secret_2024`. A cracking wordlist must contain that exact candidate; it is not guaranteed to appear in rockyou.txt.
-
-The core SQLi search runs against an unattached in-memory SQLite snapshot containing public user profile fields and Gorgan's posts only. It contains no passwords or Sriracha posts. This preserves the nested-keyword exercise while preventing that endpoint from revealing Challenge 2's flag:
-
-```text
-' UNUNIONION SELSELECTECT 1,content,3,4,5 FROM posts--
-```
-
-In the five-column UNION result, post content maps to `username`. Search Results display it as text. The normal post-topic search is a separate, non-SQLi route.
-
-The new social state resides in another in-memory SQLite database, not attached to the vulnerable search snapshot. This limits the SQLi exercise, but does not isolate the single application process from its intentional command execution or file traversal. Source inspection and cross-challenge shortcuts remain possible. Separate services or instances would be needed for stronger challenge independence.
-
-## Guides
-
-All three guides now include the seven forensic cases: setup and acquisition handling, progressive hints, and staff recovery methods.
-
-- [Setup Guide](Guides/Setup.md): Docker preparation, normal startup, shipped-image verification and recovery, readiness checks, navigation, resets, troubleshooting.
-- [Hint Book](Guides/Hint%20Book.md): the seven original exercises and four optional investigations.
-- [Staff Guide](Guides/Staff%20Guide.md): credentials, flags, solutions, judging, red-herring explanations, and scoring.
-
-Matching Word files in Guides/ use monochrome formatting and page numbers. The expanded Setup and Learning Guide covers host installation, student tools, navigation, evidence handling, the full learning sequence, Challenge 15, operation/reset/backup procedures, validation, and troubleshooting. Keep staff solutions separate from competitor materials. Source is public, so this repository also serves as an instructor/reference distribution.
+[Documentation handling](DOCUMENTATION.md) explains the separation and remaining exposure. [Change log](CHANGELOG.md) summarizes the current release without reproducing solutions.
 
 ## Validation
 
-With Node.js 18 or newer for the test runner and port 3000 available:
-
-```sh
-npm install
-node --check server.js
-node --check social.js
-node --check public/app.js
-node tests/regression.cjs
-```
-
-Tests start the real server in a temporary directory. They cover capstone replay/report gating, inactive alternatives, patch behavior, account isolation, all 19 entries, and all six code-based core solutions; seeded identities across three starts; inflated prior SQLite sequences; cookie/raw/Bearer authentication; SQLi scope; concurrent search; post creation/upload; private-post isolation; likes/bookmarks/reposts; author-only edits/pins; message notifications; replies; normal inbox scoping; intended optional IDOR reads and rejected nonmember writes; optional metadata/Base64/correction evidence; and mission score deduplication.
-
-Additional DOM interaction checks exercised navigation, messaging, flag submission, SQLi results, and theme switching. The Docker validation workflow now builds the existing image, exercises the preserved startup commands, verifies extraction from the HTTP-served stego image, and runs real Chromium desktop/mobile flows. It retains screenshots and container diagnostics as workflow artifacts. See the latest [validation results](https://github.com/test3457890/CTFcosmolog/actions/workflows/lab-validation.yml). Application dependency versions and the user startup workflow remain unchanged.
-
-See [CHANGELOG.md](CHANGELOG.md) for the file-by-file change list.
-
-### Browser and Docker validation
-
-[Docker stego and browser validation](.github/workflows/lab-validation.yml) checks the actual container and supplied image. `tests/browser.cjs` covers sign-in, feed rendering, JPEG loading, SQLi flag separation, chat replies, the intended conversation IDOR, mission submission, diagnostics, theme switching, mobile navigation, and horizontal overflow.
-
-The browser test requires Playwright tooling installed separately from the deliberately vulnerable application dependencies. CI installs that tooling into a temporary directory. `scripts/prepare-stego.sh` is an organizer recovery utility, not a required startup step.
+The repository has regression, forensic evidence, and Docker/browser validation workflows. These cover the existing web challenges, all seven offline evidence cases, capstone replay/report behavior, scoring, resets, downloads, and desktop/mobile flows. Run event-host readiness checks from the private staff runbook before participants begin. Keep screenshots and logs staff-only.
