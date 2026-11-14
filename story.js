@@ -430,4 +430,6 @@ replies.push(
  {user:6,post:'case_timeline',text:'A successful drill is still a drill. Follow the approved production request through all three sources.'}
 );
 threads.find(t=>t.id===102).messages.push({user:5,text:'For the acquisition review: accepted maintenance receipt R-314. R-271 was cancelled. The new case files are linked under #CaseFiles.'});
+posts.push({user:12,key:'capstone_review',text:'The recovered receipts point to a migration exception in the relay service. Operations console has the reconstructed workspace. Compare what looks alarming with what actually runs. #FinalReview'});
+replies.push({user:8,post:'capstone_review',text:'I kept archived files and sample account notes in the snapshot. Neither proves a live entry point. The deployment settings and identity trace matter.'});
 module.exports={people,posts,replies,threads};

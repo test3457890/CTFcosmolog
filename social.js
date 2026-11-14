@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const { run, all, get } = require('./sqlite');
 const community = require('./story');
 const forensicMissions = require('./forensics');
+const capstone = require('./capstone');
 const caseManifest = require('./public/attachments/cases/manifest.json');
 
 const missions = [
@@ -18,11 +19,14 @@ const missions = [
   { id: 'side3', title: 'Carrier provenance', points: 0, kind: 'optional', brief: 'Inspect the metadata in the facility diagram attached to the maintenance thread.', hint: 'Download /attachments/facility.svg and inspect its XML metadata. This is separate from the core stego JPEG.', flag: 'AstroSec{facility_metadata_recovered}' },
   { id: 'side4', title: 'Encoded side conversation', points: 0, kind: 'optional', brief: 'Decode the maintenance message using the method mentioned in the same conversation.', hint: 'The side conversation uses Base64 encoding. It is not encryption.', flag: 'AstroSec{maintenance_message_decoded}' }
 ];
-missions.push(...forensicMissions);
+missions.forEach(m=>{if(m.kind==='core')m.number=Number(m.id.slice(4));});
+forensicMissions.forEach((m,i)=>{m.number=8+i;});
+missions.push(...forensicMissions,capstone.mission);
 module.exports = async (app, db, auth) => {
   // Social state is not attached to the deliberately injectable search database.
   // This is still one vulnerable lab process, not a security boundary against RCE/LFI.
   const social = new sqlite3.Database(':memory:');
+  await run(social, `CREATE TABLE capstone_checks (user_id INTEGER,checkpoint TEXT,UNIQUE(user_id,checkpoint))`);
   await run(social, `CREATE TABLE reactions (user_id INTEGER, post_id INTEGER, UNIQUE(user_id,post_id))`);
   await run(social, `CREATE TABLE reposts (user_id INTEGER, post_id INTEGER, UNIQUE(user_id,post_id))`);
   await run(social, `CREATE TABLE pins (user_id INTEGER PRIMARY KEY, post_id INTEGER)`);
@@ -73,7 +77,27 @@ module.exports = async (app, db, auth) => {
     edited_at: (await get(social,'SELECT edited_at FROM edits WHERE post_id=?',[p.id]))?.edited_at||null,
     replies: (await get(social,'SELECT COUNT(*) AS n FROM replies WHERE post_id=?',[p.id])).n
   })));
-  app.get('/api/health', (req,res) => res.json({ ready: true, coreChallenges: 7, corePoints: 1550, optionalMissions: 4, forensicChallenges: 7 }));
+  app.get('/api/health', (req,res) => res.json({ ready: true, coreChallenges: 7, corePoints: 1550, optionalMissions: 4, forensicChallenges: 7, capstoneChallenges: 1, primaryChallenges: 15 }));
+  app.get('/api/capstone',auth,wrap(async(req,res)=>{
+    if(!await existsUser(req.user.id))return res.status(403).json({error:'Use an existing training account.'});
+    const solved=(await all(social,'SELECT mission_id FROM solves WHERE user_id=?',[req.user.id])).map(r=>r.mission_id);
+    const checks=(await all(social,'SELECT checkpoint FROM capstone_checks WHERE user_id=?',[req.user.id])).map(r=>r.checkpoint);
+    res.json({title:'Relay operations review',simulation:true,files:capstone.files,checks,learning:capstone.learning.map(([id,skill,lesson],i)=>({id,number:i+1,skill,lesson,recorded:solved.includes(id)}))});
+  }));
+  app.post('/api/capstone/replay',auth,wrap(async(req,res)=>{
+    if(!await existsUser(req.user.id))return res.status(403).json({error:'Use an existing training account.'});
+    const result=capstone.replay(req.body);if(result.error)return res.status(400).json({error:result.error});
+    if(result.checkpoint)await run(social,'INSERT OR IGNORE INTO capstone_checks VALUES (?,?)',[req.user.id,result.checkpoint]);
+    res.json(result);
+  }));
+  app.post('/api/capstone/report',auth,wrap(async(req,res)=>{
+    if(!await existsUser(req.user.id))return res.status(403).json({error:'Use an existing training account.'});
+    const checks=(await all(social,'SELECT checkpoint FROM capstone_checks WHERE user_id=?',[req.user.id])).map(r=>r.checkpoint);
+    if(!['baseline','bypass','patched'].every(c=>checks.includes(c)))return res.status(400).json({error:'Record the denied baseline, successful deployed replay, and denied patch preview before closing the case.'});
+    if(!capstone.reportValid(req.body))return res.status(400).json({error:'The finding does not match the deployed code and replay evidence. Review the entry point, identity change, and archived alternative.'});
+    await run(social,'INSERT OR IGNORE INTO capstone_checks VALUES (?,?)',[req.user.id,'report']);
+    res.json({flag:capstone.mission.flag,summary:'Caller-controlled compatibility input changed a verified analyst into an archivist. Removing that override blocks the replay. The archived admin function was not loaded.'});
+  }));
   app.get('/api/case-files',auth,(req,res)=>res.json(forensicMissions.map(m=>({id:m.id,title:m.title,tools:m.tools,difficulty:m.difficulty,filename:m.evidence,url:'/attachments/cases/'+m.evidence,...caseManifest.files[m.evidence]}))));
   app.get('/api/social/me',auth,wrap(async(req,res)=>{
     const user = await existsUser(req.user.id);
@@ -188,6 +212,7 @@ module.exports = async (app, db, auth) => {
     const mission=missions.find(m=>m.id===req.params.id);
     if(!mission)return res.status(404).json({error:'Mission not found.'});
     if(!await existsUser(req.user.id))return res.status(403).json({error:'Use an existing account to record progress.'});
+    if(mission.id==='capstone15'&&!await get(social,'SELECT 1 FROM capstone_checks WHERE user_id=? AND checkpoint=?',[req.user.id,'report']))return res.status(400).json({error:'Complete the Operations console review before recording Challenge 15.'});
     if(typeof req.body.flag!=='string'||req.body.flag.trim()!==mission.flag)return res.status(400).json({error:'That flag does not match this mission.'});
     await run(social,'INSERT OR IGNORE INTO solves (user_id,mission_id) VALUES (?,?)',[req.user.id,mission.id]);
     res.json({success:true,points:mission.points});

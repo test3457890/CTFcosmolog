@@ -54,7 +54,7 @@ async function stop() {
     probe.once('error', reject);
     probe.listen(3000, '127.0.0.1', () => probe.close(resolve));
   });
-  for (const name of ['server.js', 'social.js', 'forensics.js', 'sqlite.js', 'story.js', 'public', 'etc', 'flag.txt']) {
+  for (const name of ['server.js', 'social.js', 'forensics.js', 'capstone.js', 'sqlite.js', 'story.js', 'public', 'etc', 'flag.txt']) {
     fs.cpSync(path.join(root, name), path.join(temp, name), { recursive: true });
   }
   fs.closeSync(fs.openSync(path.join(temp, 'database.sqlite'), 'a'));
@@ -150,7 +150,7 @@ async function stop() {
   const crew=await (await request('/api/social/conversations/102',{headers})).json();
   assert(crew.messages.some(m=>m.content.includes(Buffer.from('AstroSec{maintenance_message_decoded}').toString('base64'))));
   let journal=await (await request('/api/missions',{headers})).json();
-  assert.equal(journal.missions.length,18);assert.equal(journal.score,0);assert(!JSON.stringify(journal).includes(flags[0]));
+  assert.equal(journal.missions.length,19);assert.equal(journal.score,0);assert(!JSON.stringify(journal).includes(flags[0]));
   const submitFlag=async(id,flag)=>request('/api/missions/'+id+'/submit',{method:'POST',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({flag})});
   assert.equal((await submitFlag('core1','wrong')).status,400);
   assert.equal((await submitFlag('core1',flags[0])).status,200);
@@ -182,6 +182,28 @@ async function stop() {
   assert.equal((await submitFlag('forensic1',forensicFlags[1])).status,400);
   for(let i=0;i<forensicFlags.length;i++)assert.equal((await submitFlag('forensic'+(i+1),forensicFlags[i])).status,200);
   await submitFlag('forensic1',forensicFlags[0]);
+  assert.equal(health.primaryChallenges,15);assert.equal(health.capstoneChallenges,1);
+  let workspace=await (await request('/api/capstone',{headers})).json();assert.equal(workspace.learning.length,14);assert.equal(workspace.files.length,9);assert.equal(workspace.checks.length,0);
+  const capFlag='AstroSec{legacy_override_exposed_and_removed}';assert(!JSON.stringify(workspace).includes(capFlag));
+  assert.equal((await submitFlag('capstone15',capFlag)).status,400);
+  const capPost=(endpoint,body)=>request('/api/capstone/'+endpoint,{method:'POST',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const finding={file:'src/identity.js',cause:'untrusted-role-override',fix:'remove-override',decoy:'archive/admin-v1.js'};
+  assert.equal((await capPost('report',finding)).status,400);
+  const replay={path:'/internal/relay/archive',mode:'deployed',headers:{},receipt:'R-314',session:'sess-42',relay:'KRONOS-7'};
+  assert.equal((await (await capPost('replay',replay)).json()).status,403);
+  assert.equal((await capPost('replay',{...replay,path:'http://example.com'})).status,400);
+  assert.equal((await capPost('replay',{...replay,headers:[]})).status,400);
+  assert.equal((await (await capPost('replay',{...replay,path:'/legacy/admin',headers:{password:'COSMO_DEMO_ADMIN_ONLY'}})).json()).status,404);
+  const bypass={...replay,headers:{'X-Relay-Compat':'R-314'}};
+  assert.equal((await (await capPost('replay',{...bypass,session:'sess-41'})).json()).status,404);
+  const exposed=await (await capPost('replay',bypass)).json();assert.equal(exposed.status,200);assert.equal(exposed.record.session,'sess-42');assert(!JSON.stringify(exposed).includes(capFlag));
+  assert.equal((await capPost('report',finding)).status,400);
+  assert.equal((await (await capPost('replay',{...bypass,mode:'patched'})).json()).status,403);
+  assert.equal((await capPost('report',{...finding,file:'archive/admin-v1.js'})).status,400);
+  const capReport=await (await capPost('report',finding)).json();assert.equal(capReport.flag,capFlag);
+  assert.equal((await submitFlag('capstone15',capFlag)).status,200);await submitFlag('capstone15',capFlag);
+  const separateToken=jwt.sign({id:4,username:'h4ck3r_man'},secret);
+  const separate=await (await request('/api/capstone',{headers:{Authorization:separateToken}})).json();assert.deepEqual(separate.checks,[]);
   journal=await (await request('/api/missions',{headers})).json();assert.equal(journal.score,1550);assert(journal.missions.every(m=>m.solved));
   const follow=await request('/api/social/people/12/follow',{method:'POST',headers});assert.equal(follow.status,200);
   const directory=await (await request('/api/social/people',{headers})).json();assert(directory.find(p=>p.id===12).following);
@@ -211,7 +233,7 @@ async function stop() {
     assert.deepEqual(debug.users.map(u => [u.id, u.username]), expected);
     const posts = await (await request('/api/posts', { headers })).json();
     assert(!posts.some(p => p.content === 'Regression test post'||p.content==='Edited regression post'));
-    const resetJournal=await (await request('/api/missions',{headers})).json();assert.equal(resetJournal.score,0);
+    const resetJournal=await (await request('/api/missions',{headers})).json();assert.equal(resetJournal.score,0);assert.deepEqual((await (await request('/api/capstone',{headers})).json()).checks,[]);
     assert.equal(Math.min(...posts.map(p => p.id)), 1);
     await stop();
   }
