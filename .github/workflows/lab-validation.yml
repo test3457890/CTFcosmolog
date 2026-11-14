@@ -10,6 +10,7 @@ on:
       - '*.js'
       - 'public/**'
       - 'tests/browser.cjs'
+      - 'tests/screenshots.cjs'
       - 'scripts/prepare-stego.sh'
       - 'scripts/check-setup.sh'
       - 'docs/**'
@@ -71,6 +72,10 @@ jobs:
         env:
           NODE_PATH: ${{ runner.temp }}/cosmolog-browser/node_modules
         run: node tests/browser.cjs
+      - name: Capture the full application gallery
+        env:
+          NODE_PATH: ${{ runner.temp }}/cosmolog-browser/node_modules
+        run: node tests/screenshots.cjs
       - name: Capture container diagnostics
         if: always()
         run: |
