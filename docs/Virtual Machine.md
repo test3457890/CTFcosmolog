@@ -31,7 +31,7 @@ Anyone controlling that VM or its Docker service can inspect the target's source
 
 Keep a Parrot Security OS or Kali Linux target VM running Docker under organizer control. Give students a separate Parrot or Kali analysis VM and the target's approved app URL. Students use tools on their own workstation but receive no target shell, Docker access, source checkout, or shared folders containing organizer files.
 
-Use the event's approved isolated network. Configure reachability for that network and verify from a student machine. Do not expose the intentionally vulnerable app through a home router or internet port-forwarding service.
+Use the event's approved isolated network. Compose listens on the target's loopback address by default, so a student VM cannot connect until the organizer selects the target VM's dedicated private interface. For example, if that assigned address is `192.0.2.10`, run `COSMOLOG_BIND_IP=192.0.2.10 docker-compose up -d` on the target; replace the example address with the actual approved VM address. Check `docker-compose port cosmolog 3000` and verify access from a student VM. Supply `COSMOLOG_BIND_IP` again whenever recreating the container. Restrict traffic to the event network; do not use `0.0.0.0`, a home router, or an internet port-forwarding service.
 
 ## Prepare a practice VM
 
@@ -46,11 +46,11 @@ Suggested starting allocation: two virtual CPUs, 4 GB RAM, and a 30 GB dynamical
 7. Stop/restart the app once and confirm progress resets as expected.
 8. Save a clean powered-off snapshot or export after completing the checks below.
 
-VirtualBox contains the guest OS; Docker contains the app inside that guest. They can be used together. The app's published container port is 3000 on the guest.
+VirtualBox contains the guest OS; Docker contains the app inside that guest. They can be used together. The app's published port is 3000 on the guest's loopback interface by default.
 
 ## Access the app from the host if needed
 
-The simplest route is the guest browser at localhost:3000. If you prefer the host browser, create a VirtualBox NAT forwarding rule for TCP with host IP 127.0.0.1, host port 3000, and guest port 3000. Then use http://127.0.0.1:3000 on the host. Use a different host port if occupied. This local-only rule is not the student-network layout for a multi-machine event.
+The simplest route is the guest browser at localhost:3000. VirtualBox NAT forwarding to a guest port cannot reach a service bound only to the guest's loopback address. For a host browser, explicitly set `COSMOLOG_BIND_IP` to the guest's private NAT interface address when starting Compose, then create a VirtualBox NAT forwarding rule for TCP with host IP `127.0.0.1`, host port 3000, and guest port 3000. Use http://127.0.0.1:3000 on the host and verify the host forwarding is local only. This is not the student-network layout for a multi-machine event.
 
 ## Export a ready-to-use image
 
