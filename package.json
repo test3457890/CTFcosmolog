@@ -12,6 +12,6 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "2.5.0",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^6.0.1"
   }
 }

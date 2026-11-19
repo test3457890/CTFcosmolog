@@ -1,7 +1,7 @@
 FROM node:22-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm ci --omit=dev
 COPY server.js social.js forensics.js capstone.js sqlite.js story.js ./
 COPY public ./public
 COPY etc ./etc
