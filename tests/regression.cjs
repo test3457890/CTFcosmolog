@@ -122,6 +122,15 @@ async function stop() {
   const posted = posts.find(p => p.content === 'Regression test post');
   assert(posted && posted.image_url);
   assert.equal((await request(posted.image_url)).status, 200);
+  const uploads = path.join(temp, 'public', 'uploads');
+  const filesBefore = fs.readdirSync(uploads).sort();
+  const oversized = new FormData();
+  oversized.set('content', 'Too large');
+  oversized.set('image', new Blob([Buffer.alloc(10 * 1024 * 1024 + 1)], { type: 'image/jpeg' }), 'large.jpg');
+  const rejected = await request('/api/posts', { method: 'POST', headers, body: oversized });
+  assert.equal(rejected.status, 413);
+  assert.match((await rejected.json()).error, /10 MB limit/);
+  assert.deepEqual(fs.readdirSync(uploads).sort(), filesBefore, 'Oversized upload leaves no file');
   // The normal inbox is scoped, while side mission 1 deliberately permits an IDOR read.
   const health=await (await request('/api/health')).json();
   assert.equal(health.corePoints,1550);assert.equal(health.optionalMissions,4);
