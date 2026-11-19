@@ -6,6 +6,8 @@ CosmoLog is a space-themed capture-the-flag training lab. Follow Nova through a 
 
 ## Screenshots
 
+[View all 9 screenshots](docs/screenshots/README.md).
+
 These previews show the running CosmoLog app. Start in the social feed, explore community profiles, and download original evidence from Case files.
 
 | Social feed | Community search |
@@ -24,6 +26,10 @@ Click a preview to view it at full resolution.
 <img src="docs/screenshots/Mobile.png" alt="CosmoLog public profile on a mobile screen in dark mode" width="300">
 
 </details>
+
+| Following feed | Community search on a phone-width screen |
+| --- | --- |
+| [![Following feed](docs/screenshots/following-feed.webp)](docs/screenshots/following-feed.webp) | [![Community search on a phone-width screen](docs/screenshots/phone-explore.webp)](docs/screenshots/phone-explore.webp) |
 
 ## Download and start
 

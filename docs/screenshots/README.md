@@ -1,13 +1,25 @@
-# CosmoLog screenshot previews
+# CTFcosmolog screenshots
 
-These are captures of the running application, selected to show its navigation and investigation tools without publishing flag values or completed solve steps.
+These screenshots show the running app with fictional training accounts. This public gallery leaves out flag values and completed solve steps. The organizer collection is distributed separately.
 
-| File | What it shows |
-|---|---|
-| Feed.png | Social timeline, posting controls, navigation, and story sidebar |
-| Explore.png | Community profiles and search controls |
-| Profile.png | A public profile with ordinary posts and evidence attachments |
-| Evidence.png | Case files, original downloads, tools, and integrity controls |
-| Mobile.png | A public profile in the mobile dark theme |
+Select an image to open it at full size.
 
-The screenshots contain fictional training accounts. Progress and timestamps reflect the capture session. The complete organizer screenshot collection includes solution screens and is distributed separately.
+| Social feed | Community search |
+| --- | --- |
+| [![Social feed](Feed.png)](Feed.png) | [![Community search](Explore.png)](Explore.png) |
+
+| Fictional public profile | Case file and evidence downloads |
+| --- | --- |
+| [![Fictional public profile](Profile.png)](Profile.png) | [![Case file and evidence downloads](Evidence.png)](Evidence.png) |
+
+| Mobile profile in dark mode | Following feed |
+| --- | --- |
+| [![Mobile profile in dark mode](Mobile.png)](Mobile.png) | [![Following feed](following-feed.webp)](following-feed.webp) |
+
+| Saved posts | Notifications |
+| --- | --- |
+| [![Saved posts](saved-posts.webp)](saved-posts.webp) | [![Notifications](notifications.webp)](notifications.webp) |
+
+| Community search on a phone-width screen |  |
+| --- | --- |
+| [![Community search on a phone-width screen](phone-explore.webp)](phone-explore.webp) |  |
