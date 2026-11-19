@@ -1,6 +1,6 @@
 # CosmoLog CTF
 
-A fictional social-network investigation following Nova on a Journey through the evil.esAI incident. Follow community clues, analyze evidence with forensic tools, and finish with Challenge 15 in a reconstructed operations workspace.
+CosmoLog is a space-themed capture-the-flag training lab. Follow Nova through a fictional social network, analyze supplied evidence, and submit a final finding in Challenge 15.
 
 [Download ZIP](https://github.com/test3457890/CTFcosmolog/archive/refs/heads/main.zip) · [Setup guide](docs/Setup.md) · [VM guide](docs/Virtual%20Machine.md) · [Wiki](https://github.com/test3457890/CTFcosmolog/wiki) · [Documentation hub](docs/README.md) · [Get help](https://github.com/test3457890/CTFcosmolog/discussions/1)
 
@@ -26,6 +26,10 @@ Click a preview to view it at full resolution.
 </details>
 
 ## Download and start
+
+> The lab is intentionally vulnerable. Run it in an isolated training VM or on a private event network you control. The supplied Compose file publishes port 3000 on the VM, so keep it off public networks.
+
+> The lab is intentionally vulnerable. Run it in an isolated training VM or on a private event network you control. The supplied Compose file publishes port 3000 on the VM, so keep it off public networks.
 
 Inside your prepared Linux VM, with Docker and `docker-compose` installed:
 
@@ -64,7 +68,7 @@ Parrot Security OS is the primary recommendation. Kali Linux is the alternative.
 
 A self-contained practice VM is convenient, but giving someone VM administrator or Docker access also exposes the challenge source and answers. For a scored event, keep the target VM under organizer control and give competitors a separate analysis VM plus the app URL. See the VM guide for both layouts.
 
-## Current release
+## Challenge tracks
 
 | Track | Challenges | Result |
 |---|---|---|
