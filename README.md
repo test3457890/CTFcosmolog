@@ -87,6 +87,7 @@ There are 15 numbered challenges and four side-story entries, for 19 journal ent
 
 - A responsive community feed with 12 fictional profiles, 92 additional story posts, and 39 seeded replies.
 - Likes, reposts, follows, bookmarks, threaded replies, profile pages, notifications, and six ordinary inbox conversations per student account.
+- Social post images are limited to 10 MB each; oversized uploads return an error and are not saved.
 - Age-appropriate, politically neutral station life alongside incident reports and explainable false leads.
 - Case files with original downloads, byte counts, and SHA-256 hashes.
 - A filtered Mission journal with progressive hints and duplicate-submission protection.
