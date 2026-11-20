@@ -35,8 +35,6 @@ Click a preview to view it at full resolution.
 
 > The lab is intentionally vulnerable. Run it in an isolated training VM or on a private event network you control. The supplied Compose file publishes port 3000 on the VM, so keep it off public networks.
 
-> The lab is intentionally vulnerable. Run it in an isolated training VM or on a private event network you control. The supplied Compose file publishes port 3000 on the VM, so keep it off public networks.
-
 Inside your prepared Linux VM, with Docker and `docker-compose` installed:
 
 ```sh
