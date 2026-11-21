@@ -86,7 +86,7 @@ curl -f http://localhost:3000/api/health
 
 The first start needs internet access to fetch the image and dependencies. Wait for the build to complete. The service is `cosmolog`. The database path must be a regular file, created before startup.
 
-Open http://localhost:3000 in the VM browser. Sign in as `cyber_newbie` with `password123`, or `h4ck3r_man` with `password123`. These are application credentials, not Linux or staff-vault credentials.
+The default Compose mapping listens only on `127.0.0.1:3000` inside the VM. Confirm the binding with `docker-compose port cosmolog 3000`; it should show `127.0.0.1:3000`. Open http://localhost:3000 in the VM browser. For organizer-approved access from another VM, follow the [isolated network instructions](Virtual%20Machine.md#layout-b-organizer-target-and-student-workstation) before changing the bind address. Sign in as `cyber_newbie` with `password123`, or `h4ck3r_man` with `password123`. These are application credentials, not Linux or staff-vault credentials.
 
 The health response should report ready true, 15 primary challenges, seven core challenges totaling 1,550 points, seven forensic challenges, one capstone, and four optional missions.
 
@@ -120,7 +120,7 @@ A server restart resets users, social activity, journal progress, and capstone c
 | Docker permission denied | Docker service status and current login's intended group membership |
 | docker-compose missing | Verify Compose plugin, then create the compatibility wrapper only if needed |
 | Cannot connect | Container logs, port 3000, and the VM networking layout |
-| Works inside VM only | Use the VM browser, or configure the documented local-only NAT forwarding |
+| Works inside VM only | This is the safe default. For host-only access, follow the VM guide's guest-interface and local-only NAT instructions; for a scored event, use an approved isolated interface |
 | Database mount fails | Check database.sqlite is a regular file before startup |
 | Old app after update | Rebuild server changes and refresh cached browser files |
 | Staff vault will not open | Download the HTML, open locally, and use the separate Unlock Key file; see Access |

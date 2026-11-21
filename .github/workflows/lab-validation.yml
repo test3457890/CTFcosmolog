@@ -15,6 +15,7 @@ on:
       - 'scripts/check-setup.sh'
       - 'docs/**'
       - 'README.md'
+  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
@@ -51,6 +52,8 @@ jobs:
             sleep 2
           done
           test "$ready" = 1
+          binding=$(docker-compose port cosmolog 3000)
+          test "$binding" = "127.0.0.1:3000"
           docker-compose exec -T cosmolog sh -ec '
             test ! -e /app/Guides
             test ! -e /app/tests

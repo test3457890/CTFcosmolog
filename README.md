@@ -33,7 +33,7 @@ Click a preview to view it at full resolution.
 
 ## Download and start
 
-> The lab is intentionally vulnerable. Run it in an isolated training VM or on a private event network you control. The supplied Compose file publishes port 3000 on the VM, so keep it off public networks.
+> The lab is intentionally vulnerable. The default Compose configuration binds port 3000 to `127.0.0.1` on the VM. Run it only in an isolated training environment; for approved multi-machine events, bind a specific private VM interface as described in the [VM guide](docs/Virtual%20Machine.md). Never forward the lab to the internet.
 
 Inside your prepared Linux VM, with Docker and `docker-compose` installed:
 

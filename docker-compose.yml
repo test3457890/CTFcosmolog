@@ -3,7 +3,7 @@ services:
   cosmolog:
     build: .
     ports:
-      - "3000:3000"
+      - "${COSMOLOG_BIND_IP:-127.0.0.1}:3000:3000"
     volumes:
       - ./database.sqlite:/app/database.sqlite
       - ./public:/app/public
