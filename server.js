@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
     destination: function (req, file, cb) { cb(null, 'public/uploads/') },
     filename: function (req, file, cb) { cb(null, Date.now() + path.extname(file.originalname)) }
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
 const db = new sqlite3.Database('./database.sqlite');
 
@@ -250,6 +250,14 @@ app.get('/api/debug/dump', (req, res) => {
             users: users
         });
     });
+});
+
+// A size limit prevents ordinary social uploads from exhausting the lab host's disk.
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(413).json({ error: 'Image exceeds the 10 MB limit' });
+    }
+    next(err);
 });
 
 initialize().then(() => {
