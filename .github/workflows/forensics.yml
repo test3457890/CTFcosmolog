@@ -7,7 +7,7 @@ permissions:
 jobs:
   evidence:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - name: Install offline analysis tools
@@ -15,6 +15,6 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           sudo apt-get update
-          sudo -E apt-get install -y tshark libimage-exiftool-perl sleuthkit
+          sudo -E apt-get install -y --no-install-recommends tshark libimage-exiftool-perl sleuthkit
       - name: Solve the shipped evidence with real tools
         run: python3 tests/forensics.py

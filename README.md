@@ -115,3 +115,7 @@ Source, tests, evidence builders, previous commits, and workflow artifacts can r
 The repository has regression, forensic evidence, and Docker/browser validation workflows. These cover the existing web challenges, all seven offline evidence cases, capstone replay/report behavior, scoring, resets, downloads, and desktop/mobile flows. Run event-host readiness checks from the private staff runbook before participants begin. Keep screenshots and logs staff-only.
 
 The automated Docker/browser workflows use Ubuntu 24.04 runners. That CI implementation detail does not change the recommended Parrot/Kali student environment. A prepared Parrot/Kali VM image has not been built or certified by CI.
+
+The Docker build and Node regression workflow install the exact production dependency tree recorded in `package-lock.json` with `npm ci`. The maintained Node runtime is version 22, and `sqlite3` 6.0.1 replaces the older native dependency chain. The Node workflow checks production dependency advisories at build time. An audit result is a point-in-time check and does not make this intentionally vulnerable CTF safe to publish on the internet.
+
+For the owner's planned Windows host and Linux VM session, follow the [manual test checklist](docs/Owner%20Test%20Checklist.md). Its boxes remain pending until tested on that environment.

@@ -7,6 +7,7 @@ on:
       - 'Dockerfile'
       - 'docker-compose.yml'
       - 'package.json'
+      - 'package-lock.json'
       - '*.js'
       - 'public/**'
       - 'tests/browser.cjs'
