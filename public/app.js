@@ -141,9 +141,42 @@ async function tools(){title('Station tools');const holder=el('div');const intro
  const diag=el('section','section');diag.append(el('h2','','Satellite Diagnostics'),el('p','','Ping a relay address to check connectivity.'));const form=el('form');const input=el('input');input.type='text';input.placeholder='e.g., 127.0.0.1';input.setAttribute('aria-label','Relay address');const submit=el('button','primary','Run Diagnostics');submit.type='submit';const output=el('pre');output.hidden=true;form.append(input,submit);form.addEventListener('submit',async e=>{e.preventDefault();output.hidden=false;output.textContent='Running diagnostics…';submit.disabled=true;try{const data=await api('/api/satellite/ping',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ip:input.value})});output.textContent=data.output||data.error;}catch(e){output.textContent=e.message;}finally{submit.disabled=false;}});diag.append(form,output);holder.append(diag);
  const admin=el('section','section');admin.append(el('h2','','Satellite Control Panel'));const adminout=el('pre');adminout.hidden=true;admin.append(button('Access Control Panel','primary',async()=>{adminout.hidden=false;try{adminout.textContent=JSON.stringify(await api('/api/admin/satellite-control'),null,2);}catch(e){adminout.textContent=e.message;}}),adminout);holder.append(admin);return holder;}
 async function refreshPeople(){people=await api('/api/social/people');}
-async function refreshSidebar(){const [notes,progress]=await Promise.all([api('/api/social/notifications'),api('/api/missions')]);const unread=notes.filter(n=>!n.seen).length;$('unread').textContent=unread||'';$('missionProgress').textContent=progress.score+' / 1,550 core points';}
+async function refreshSidebar(){
+ const [notes,progress]=await Promise.all([api('/api/social/notifications'),api('/api/missions')]);
+ const unread=notes.filter(n=>!n.seen).length;
+ $('unread').textContent=unread||'';
+ const coreDone=progress.missions.filter(m=>m.kind==='core'&&m.solved).length;
+ const forenDone=progress.missions.filter(m=>m.kind==='forensic'&&m.solved).length;
+ const otherDone=progress.missions.filter(m=>m.kind!=='core'&&m.kind!=='forensic'&&m.solved).length;
+ const totalLeft=progress.missions.filter(m=>!m.solved).length;
+ $('missionProgress').textContent=progress.score+' / 1,550 core pts · '+totalLeft+' flags remaining';
+ const ft=$('flagTracker');
+ if(ft){
+  ft.replaceChildren();
+  const grid=el('div','tracker-stats');
+  const s1=el('div','tracker-stat');s1.append(el('strong','',coreDone+' / 7'),el('small','','Core Web'));
+  const s2=el('div','tracker-stat');s2.append(el('strong','',forenDone+' / 7'),el('small','','Forensics'));
+  const s3=el('div','tracker-stat');s3.append(el('strong','',otherDone+' / 5'),el('small','','Capstone & Side'));
+  const s4=el('div','tracker-stat');s4.append(el('strong','',String(totalLeft)),el('small','','Flags To Go'));
+  grid.append(s1,s2,s3,s4);
+  ft.append(grid);
+  const unsolved=progress.missions.filter(m=>!m.solved);
+  if(unsolved.length){
+   const form=el('form','quick-flag');
+   const sel=el('select');sel.setAttribute('aria-label','Choose challenge');
+   for(const m of unsolved){const o=el('option','',(m.number?m.number+'. ':'')+m.title);o.value=m.id;sel.append(o);}
+   const inp=el('input');inp.type='text';inp.placeholder='Type flag: AstroSec{...}';inp.setAttribute('aria-label','Quick flag input');
+   const btn=el('button','primary btn-xs','Submit Flag');btn.type='submit';
+   form.append(sel,inp,btn);
+   form.addEventListener('submit',async e=>{e.preventDefault();btn.disabled=true;try{await send('/api/missions/'+sel.value+'/submit',{flag:inp.value});toast('Flag accepted!');await refreshSidebar();if(location.hash.startsWith('#/missions'))await route();}catch(err){toast(err.message);btn.disabled=false;}});
+   ft.append(form);
+  }else{
+   ft.append(el('p','small','All 19 flags recovered!'));
+  }
+ }
+}
 async function route(){const turn=++generation;const hash=location.hash.slice(1)||'/home';const [path,query='']=hash.split('?');const parts=path.split('/').filter(Boolean);const section=parts[0]||'home';document.querySelectorAll('[data-nav]').forEach(a=>a.classList.toggle('active',a.dataset.nav===section));loading();try{let view;switch(section){case 'home':view=await home();break;case 'bookmarks':view=await home(true);break;case 'explore':view=await explore(new URLSearchParams(query));break;case 'profile':view=await profile(parts[1]);break;case 'post':view=await postView(parts[1]);break;case 'messages':view=await messages(parts[1]);break;case 'notifications':view=await notifications();break;case 'missions':view=await missions();break;case 'casefiles':view=await casefiles();break;case 'tools':view=await tools();break;case 'operations':view=await operations();break;default:title('Page unavailable');view=empty('Choose a page from the navigation.');}
  if(turn!==generation)return;$('view').replaceChildren(view);const focusCase=new URLSearchParams(query).get('case');if(section==='missions'&&/^(core[1-7]|forensic[1-7]|capstone15)$/.test(focusCase||''))document.querySelector('[data-mission-id="'+focusCase+'"]')?.scrollIntoView({block:'start'});await refreshSidebar();}catch(e){if(turn===generation)$('view').replaceChildren(empty(e.message));}}
 function renderSuggestions(){const box=$('suggestions');if(!box)return;box.replaceChildren();people.filter(p=>[5,8,12].includes(p.id)).forEach(p=>{const row=el('div','suggest-row');row.append(person(p));const btn=button(p.following?'Following':'Follow','secondary btn-xs',async()=>{try{await send('/api/social/people/'+p.id+'/follow');p.following=!p.following;btn.textContent=p.following?'Following':'Follow';}catch(e){toast(e.message);}});row.append(btn);box.append(row);});}
 document.querySelectorAll('nav a[data-nav]').forEach(a=>{const k=a.dataset.nav;if(ICONS[k])a.prepend(icon(k,'nav-ico'));});
-(async()=>{if(localStorage.getItem('darkMode')==='true')document.body.classList.add('dark-mode');$('theme').onclick=()=>{document.body.classList.toggle('dark-mode');localStorage.setItem('darkMode',document.body.classList.contains('dark-mode'));};$('logout').onclick=()=>{document.cookie='token=; Max-Age=0; path=/';location.href='/login.html';};const lb=$('lightbox'),lbClose=$('lightbox-close');if(lb){lb.addEventListener('click',e=>{if(e.target===lb||e.target===lbClose)lb.hidden=true;});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden)lb.hidden=true;});}$('view')?.addEventListener('click',e=>{const img=e.target.closest('img.post-image');if(img&&img.src)openLightbox(img.src,img.alt);});try{me=await api('/api/social/me');await refreshPeople();$('account').append(person(me));renderSuggestions();addEventListener('hashchange',route);await route();}catch(e){toast(e.message);}})();
+(async()=>{if(localStorage.getItem('darkMode')==='true')document.body.classList.add('dark-mode');$('theme').onclick=()=>{document.body.classList.toggle('dark-mode');localStorage.setItem('darkMode',document.body.classList.contains('dark-mode'));};$('logout').onclick=()=>{document.cookie='token=; Max-Age=0; path=/';location.href='/login.html';};const lb=$('lightbox'),lbClose=$('lightbox-close');if(lb){lb.addEventListener('click',e=>{if(e.target===lb||e.target===lbClose)lb.hidden=true;});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden)lb.hidden=true;});}$('view')?.addEventListener('click',e=>{const img=e.target.closest('img.post-image');if(img&&img.src)openLightbox(img.src,img.alt);});try{me=await api('/api/social/me');await refreshPeople();const pill=link('','#/profile','user-pill');pill.append(avatar(me.username),el('span','','@'+me.username));$('account').append(pill);renderSuggestions();addEventListener('hashchange',route);await route();}catch(e){toast(e.message);}})();
