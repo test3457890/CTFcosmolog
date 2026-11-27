@@ -54,6 +54,6 @@
 .btn-xs{padding:5px 10px;font-size:11px;border-radius:999px}
 .lightbox{position:fixed;inset:0;z-index:100;background:rgba(8,12,22,.86);display:flex;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px)}
 .lightbox[hidden]{display:none}
-.lightbox img{max-width:92vw;max-height:88vh;border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.lightbox img{min-width:min(680px,88vw);max-width:92vw;max-height:88vh;object-fit:contain;border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
 .lightbox-close{position:fixed;top:18px;right:22px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:8px 14px;font-size:12px}
 @media(max-width:650px){.inline-reply{margin-left:0}}

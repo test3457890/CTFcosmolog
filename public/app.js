@@ -7,7 +7,7 @@ const button = (text, cls, handler) => { const n=el('button',cls,text);n.type='b
 function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4500);}
 async function api(url,options={}) {
  const r=await fetch(url,options);
- if(r.redirected&&new URL(r.url).pathname==='/login.html'){location.href='/login.html';throw Error('Please sign in again.');}
+ if(r.redirected&&new URL(r.url).pathname==='/login.html'){try{if(location.hash)sessionStorage.setItem('cosmolog_next',location.hash);}catch{}location.href='/login.html';throw Error('Please sign in again.');}
  const data=await r.json();if(!r.ok)throw Error(data.error||'The request could not be completed.');return data;
 }
 const send=(url,data={})=>api(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
@@ -43,14 +43,27 @@ function iconBtn(ico,text,cls,handler){
 function setIconBtnText(btn,ico,text){
  btn.replaceChildren(icon(ico,'btn-ico'),document.createTextNode(text));
 }
+const AVATAR_PATTERNS=[
+ '<circle cx="20" cy="20" r="14" fill="none" stroke="#fff" stroke-width="2"/><ellipse cx="20" cy="20" rx="18" ry="6" transform="rotate(-24 20 20)" fill="none" stroke="#fff" stroke-width="1.8"/>',
+ '<polygon points="20,4 35,20 20,36 5,20" fill="none" stroke="#fff" stroke-width="2"/><circle cx="20" cy="20" r="5" fill="#fff"/>',
+ '<circle cx="10" cy="12" r="2.2" fill="#fff"/><circle cx="28" cy="10" r="2" fill="#fff"/><circle cx="24" cy="28" r="2.5" fill="#fff"/><path d="M10 12L28 10L24 28Z" fill="none" stroke="#fff" stroke-width="1.4"/>',
+ '<path d="M4 26 Q12 16 20 24 T36 18" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M4 16 Q14 8 24 14 T36 10" fill="none" stroke="#fff" stroke-width="1.4"/>',
+ '<polygon points="20,4 33,12 33,28 20,36 7,28 7,12" fill="none" stroke="#fff" stroke-width="2"/>',
+ '<path d="M26 8A12 12 0 1 0 32 28A9.5 9.5 0 1 1 26 8Z" fill="#fff"/>',
+ '<circle cx="20" cy="20" r="6" fill="#fff"/><circle cx="20" cy="20" r="12" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="20" cy="20" r="17" fill="none" stroke="#fff" stroke-width="1.2"/>',
+ '<path d="M8 32L32 8M16 32L32 16M8 24L24 8" stroke="#fff" stroke-width="2" stroke-linecap="round"/>',
+ '<rect x="8" y="8" width="24" height="24" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="20" cy="20" r="5" fill="none" stroke="#fff" stroke-width="2"/>',
+ '<path d="M20 5L24 16L35 16L26 23L29 34L20 27L11 34L14 23L5 16L16 16Z" fill="none" stroke="#fff" stroke-width="1.8"/>',
+ '<path d="M10 30C10 18 18 10 30 10" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M16 30C16 21 21 16 30 16" fill="none" stroke="#fff" stroke-width="2"/><circle cx="28" cy="28" r="3" fill="#fff"/>',
+ '<path d="M8 14h24M8 20h24M8 26h24M14 8v24M20 8v24M26 8v24" stroke="#fff" stroke-width="1.2"/>'
+];
 function avatarColor(name){let h=0;for(const ch of String(name||''))h=(h*31+ch.charCodeAt(0))>>>0;return h;}
 function avatar(name,large=false){
  const h=avatarColor(name);
  const wrap=el('span','avatar avatar-c'+(h%8)+(large?' large':''));
  const bg=document.createElementNS('http://www.w3.org/2000/svg','svg');
  bg.setAttribute('viewBox','0 0 40 40');bg.setAttribute('class','avatar-bg');bg.setAttribute('aria-hidden','true');
- const cx=12+(h%17),cy=10+((h>>4)%17);
- bg.innerHTML=`<circle cx="${cx}" cy="${cy}" r="14" fill="#fff"/><circle cx="${40-cx}" cy="${40-cy}" r="9" fill="#fff"/>`;
+ bg.innerHTML=AVATAR_PATTERNS[h%AVATAR_PATTERNS.length];
  const initials=el('span','avatar-initials',name.replace(/[^a-z0-9]/ig,'').slice(0,2).toUpperCase());
  wrap.append(bg,initials);
  return wrap;
@@ -133,4 +146,4 @@ async function route(){const turn=++generation;const hash=location.hash.slice(1)
  if(turn!==generation)return;$('view').replaceChildren(view);const focusCase=new URLSearchParams(query).get('case');if(section==='missions'&&/^(core[1-7]|forensic[1-7]|capstone15)$/.test(focusCase||''))document.querySelector('[data-mission-id="'+focusCase+'"]')?.scrollIntoView({block:'start'});await refreshSidebar();}catch(e){if(turn===generation)$('view').replaceChildren(empty(e.message));}}
 function renderSuggestions(){const box=$('suggestions');if(!box)return;box.replaceChildren();people.filter(p=>[5,8,12].includes(p.id)).forEach(p=>{const row=el('div','suggest-row');row.append(person(p));const btn=button(p.following?'Following':'Follow','secondary btn-xs',async()=>{try{await send('/api/social/people/'+p.id+'/follow');p.following=!p.following;btn.textContent=p.following?'Following':'Follow';}catch(e){toast(e.message);}});row.append(btn);box.append(row);});}
 document.querySelectorAll('nav a[data-nav]').forEach(a=>{const k=a.dataset.nav;if(ICONS[k])a.prepend(icon(k,'nav-ico'));});
-(async()=>{if(localStorage.getItem('darkMode')==='true')document.body.classList.add('dark-mode');$('theme').onclick=()=>{document.body.classList.toggle('dark-mode');localStorage.setItem('darkMode',document.body.classList.contains('dark-mode'));};$('logout').onclick=()=>{document.cookie='token=; Max-Age=0; path=/';location.href='/login.html';};const lb=$('lightbox'),lbClose=$('lightbox-close');if(lb){lb.addEventListener('click',e=>{if(e.target===lb||e.target===lbClose)lb.hidden=true;});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden)lb.hidden=true;});}try{me=await api('/api/social/me');await refreshPeople();$('account').append(person(me));renderSuggestions();addEventListener('hashchange',route);await route();}catch(e){toast(e.message);}})();
+(async()=>{if(localStorage.getItem('darkMode')==='true')document.body.classList.add('dark-mode');$('theme').onclick=()=>{document.body.classList.toggle('dark-mode');localStorage.setItem('darkMode',document.body.classList.contains('dark-mode'));};$('logout').onclick=()=>{document.cookie='token=; Max-Age=0; path=/';location.href='/login.html';};const lb=$('lightbox'),lbClose=$('lightbox-close');if(lb){lb.addEventListener('click',e=>{if(e.target===lb||e.target===lbClose)lb.hidden=true;});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden)lb.hidden=true;});}$('view')?.addEventListener('click',e=>{const img=e.target.closest('img.post-image');if(img&&img.src)openLightbox(img.src,img.alt);});try{me=await api('/api/social/me');await refreshPeople();$('account').append(person(me));renderSuggestions();addEventListener('hashchange',route);await route();}catch(e){toast(e.message);}})();
