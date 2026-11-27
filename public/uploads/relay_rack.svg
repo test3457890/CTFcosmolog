@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <rect width="800" height="450" fill="#0f172a"/>
+  <rect x="130" y="50" width="540" height="350" rx="10" fill="#1e293b" stroke="#475569" stroke-width="3"/>
+  <rect x="160" y="80" width="480" height="55" rx="4" fill="#020617"/>
+  <circle cx="190" cy="108" r="8" fill="#22c55e"/><circle cx="220" cy="108" r="8" fill="#22c55e"/><circle cx="250" cy="108" r="8" fill="#f59e0b"/>
+  <text x="285" y="114" fill="#94a3b8" font-family="monospace" font-size="16">RELAY RACK B4 // KRONOS-7 LINK</text>
+  <rect x="160" y="155" width="480" height="55" rx="4" fill="#020617"/>
+  <circle cx="190" cy="183" r="8" fill="#22c55e"/><circle cx="220" cy="183" r="8" fill="#22c55e"/>
+  <text x="285" y="189" fill="#94a3b8" font-family="monospace" font-size="16">TELEMETRY BUS // SYNCED</text>
+  <rect x="160" y="230" width="480" height="140" rx="4" fill="#020617"/>
+  <text x="180" y="268" fill="#38bdf8" font-family="monospace" font-size="15">SHIFT HANDOFF NOTE: DO NOT UNPLUG PORT 4</text>
+  <text x="180" y="302" fill="#64748b" font-family="monospace" font-size="14">TEMP: 21.4 C  |  SNR: 34.2 dB  |  STATUS: OK</text>
+</svg>

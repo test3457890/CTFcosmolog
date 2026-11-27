@@ -11,8 +11,33 @@ async function api(url,options={}) {
  const data=await r.json();if(!r.ok)throw Error(data.error||'The request could not be completed.');return data;
 }
 const send=(url,data={})=>api(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-function avatarColor(name){let h=0;for(const ch of String(name||''))h=(h*31+ch.charCodeAt(0))>>>0;return 'avatar-c'+(h%8);}
-function avatar(name,large=false){return el('span','avatar '+avatarColor(name)+(large?' large':''),name.replace(/[^a-z0-9]/ig,'').slice(0,2).toUpperCase());}
+function avatarColor(name){let h=0;for(const ch of String(name||''))h=(h*31+ch.charCodeAt(0))>>>0;return h;}
+function avatar(name,large=false){
+ const h=avatarColor(name);
+ const wrap=el('span','avatar avatar-c'+(h%8)+(large?' large':''));
+ const skins=['#f6d5b8','#e5b893','#c68e63','#8d5524','#f1c27d','#d49a73'];
+ const hairs=['#1e293b','#451a03','#92400e','#cbd5e1','#7c2d12','#312e81'];
+ const suits=['#334155','#1e40af','#065f46','#7c2d12','#4c1d95','#0f766e'];
+ const skin=skins[h%skins.length],hair=hairs[(h>>3)%hairs.length],suit=suits[(h>>6)%suits.length];
+ const hasGlasses=(h>>9)%3===0,hasHeadset=(h>>11)%3===0;
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ svg.setAttribute('viewBox','0 0 40 40');
+ svg.setAttribute('width','100%');
+ svg.setAttribute('height','100%');
+ svg.setAttribute('aria-hidden','true');
+ const parts=[
+  `<path d="M6,40 C6,29 12,26 20,26 C28,26 34,29 34,40 Z" fill="${suit}"/>`,
+  `<circle cx="20" cy="17" r="9" fill="${skin}"/>`,
+  `<path d="M11,16 C11,8 29,8 29,16 C27,12 13,12 11,16 Z" fill="${hair}"/>`,
+  `<circle cx="16.8" cy="17" r="1.2" fill="#0f172a"/><circle cx="23.2" cy="17" r="1.2" fill="#0f172a"/>`,
+  `<path d="M16.5,21 Q20,23.5 23.5,21" fill="none" stroke="#7c2d12" stroke-width="1.3" stroke-linecap="round"/>`
+ ];
+ if(hasGlasses)parts.push(`<rect x="13.5" y="14.5" width="5.5" height="4" rx="1.2" fill="none" stroke="#e2e8f0" stroke-width="1.1"/><rect x="21" y="14.5" width="5.5" height="4" rx="1.2" fill="none" stroke="#e2e8f0" stroke-width="1.1"/><line x1="19" y1="16.5" x2="21" y2="16.5" stroke="#e2e8f0" stroke-width="1.1"/>`);
+ if(hasHeadset)parts.push(`<path d="M10,17 A10,10 0 0,1 30,17" fill="none" stroke="#38bdf8" stroke-width="1.6"/><rect x="8.5" y="15" width="2.5" height="5" rx="1" fill="#38bdf8"/><path d="M10,20 L15,22" stroke="#38bdf8" stroke-width="1.2"/>`);
+ svg.innerHTML=parts.join('');
+ wrap.append(svg);
+ return wrap;
+}
 function roleBadge(name){if(name==='Gorgan Solutions')return el('span','role-badge org','ORG');if(['mira_ops','relay_watch','patch_notes'].includes(name))return el('span','role-badge','OPS');if(['nova_fieldnotes','signal_archive'].includes(name))return el('span','role-badge','CREW');return null;}
 function person(p){const row=el('div','person');row.append(avatar(p.username));const text=el('div');const top=el('span','row');top.append(link('@'+p.username,'#/profile/'+p.id));const b=roleBadge(p.username);if(b)top.append(b);text.append(top);if(p.bio)text.append(el('small','',p.bio.length>45?p.bio.slice(0,45)+'…':p.bio));row.append(text);return row;}
 function fullTime(value){const raw=/Z$|[+-]\d\d:\d\d$/.test(value)?value:value.replace(' ','T')+'Z';const date=new Date(raw);return Number.isNaN(date.getTime())?value:date.toLocaleString(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});}
@@ -32,7 +57,7 @@ function postCard(p){
  const likeBtn=button((p.liked?'Liked':'Like')+' · '+p.likes,p.liked?'on':'',async()=>{try{await send('/api/social/posts/'+p.id+'/like');p.liked=!p.liked;p.likes=Math.max(0,(p.likes||0)+(p.liked?1:-1));likeBtn.textContent=(p.liked?'Liked':'Like')+' · '+p.likes;likeBtn.className=p.liked?'on pop':'';}catch(e){toast(e.message);}});
  const repostBtn=button((p.reposted?'Reposted':'Repost')+' · '+p.reposts,p.reposted?'on':'',async()=>{try{await send('/api/social/posts/'+p.id+'/repost');p.reposted=!p.reposted;p.reposts=Math.max(0,(p.reposts||0)+(p.reposted?1:-1));repostBtn.textContent=(p.reposted?'Reposted':'Repost')+' · '+p.reposts;repostBtn.className=p.reposted?'on pop':'';}catch(e){toast(e.message);}});
  const replyLinkBtn=button('Replies · '+p.replies,'',()=>location.hash='/post/'+p.id);
- const quickReplyBtn=button('Quick reply','',()=>{const existing=card.querySelector('.inline-reply');if(existing){existing.remove();return;}const box=el('form','inline-reply');const inp=el('textarea');inp.placeholder='Reply to @'+p.username+'…';inp.maxLength=1000;const row=el('div','row between');const sendBtn=el('button','primary btn-xs','Reply');sendBtn.type='submit';const cancel=button('Cancel','secondary btn-xs',()=>box.remove());row.append(cancel,sendBtn);box.append(inp,row);box.addEventListener('submit',async e=>{e.preventDefault();sendBtn.disabled=true;try{await send('/api/social/posts/'+p.id+'/reply',{content:inp.value});p.replies=(p.replies||0)+1;replyLinkBtn.textContent='Replies · '+p.replies;box.remove();toast('Reply posted.');}catch(e){toast(e.message);sendBtn.disabled=false;}});card.append(box);inp.focus();});
+ const quickReplyBtn=button('Quick reply','',()=>{const existing=card.querySelector('.inline-reply');if(existing){existing.remove();return;}const box=el('form','inline-reply');const inp=el('textarea');inp.placeholder='Reply to @'+p.username+'…';inp.maxLength=1000;const row=el('div','row between');const sendBtn=el('button','primary btn-xs','Reply');sendBtn.type='submit';const cancel=button('Cancel','secondary btn-xs',()=>box.remove());row.append(cancel,sendBtn);box.append(inp,row);box.addEventListener('submit',async e=>{e.preventDefault();sendBtn.disabled=true;try{const res=await send('/api/social/posts/'+p.id+'/reply',{content:inp.value});p.replies=(p.replies||0)+(res.autoReply?2:1);replyLinkBtn.textContent='Replies · '+p.replies;box.remove();toast(res.autoReply?'@'+res.autoReply.username+' replied back!':'Reply posted.');if(res.autoReply)await refreshSidebar();}catch(e){toast(e.message);sendBtn.disabled=false;}});card.append(box);inp.focus();});
  const bookmarkBtn=button(p.bookmarked?'Bookmarked':'Bookmark',p.bookmarked?'on':'',async()=>{try{await send('/api/social/posts/'+p.id+'/bookmark');p.bookmarked=!p.bookmarked;bookmarkBtn.textContent=p.bookmarked?'Bookmarked':'Bookmark';bookmarkBtn.className=p.bookmarked?'on pop':'';toast(p.bookmarked?'Saved to Bookmarks.':'Removed from Bookmarks.');}catch(e){toast(e.message);}});
  actions.append(likeBtn,repostBtn,replyLinkBtn,quickReplyBtn,bookmarkBtn,button('Copy link','',async()=>{try{await navigator.clipboard.writeText(location.origin+'/#/post/'+p.id);toast('Post link copied.');}catch{toast(location.origin+'/#/post/'+p.id);}}));
  if(p.user_id===me.id){actions.append(button(p.pinned?'Unpin':'Pin','',async()=>{try{await send('/api/social/posts/'+p.id+'/pin');await route();}catch(e){toast(e.message);}}),button('Edit','',()=>{const form=el('form','section');const input=el('textarea');input.value=p.content;input.maxLength=280;input.setAttribute('aria-label','Edit post');const save=el('button','primary','Save changes');save.type='submit';form.append(input,save,button('Cancel','secondary',()=>form.remove()));form.addEventListener('submit',async e=>{e.preventDefault();try{await send('/api/social/posts/'+p.id+'/edit',{content:input.value});route();}catch(e){toast(e.message);}});card.append(form);input.focus();}));}

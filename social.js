@@ -46,7 +46,7 @@ module.exports = async (app, db, auth) => {
   const postIds = {};
   for (const [i,p] of community.posts.entries()) {
     const date = new Date(Date.UTC(2026, 10, 13, 8, i * 9)).toISOString().replace('T',' ').slice(0,19);
-    const result = await run(db, 'INSERT INTO posts (user_id,content,is_private,created_at) VALUES (?,?,0,?)', [p.user,p.text,date]);
+    const result = await run(db, 'INSERT INTO posts (user_id,content,image_url,is_private,created_at) VALUES (?,?,?,0,?)', [p.user,p.text,p.image||null,date]);
     if (p.key) postIds[p.key] = result.id;
   }
   await run(social,'INSERT INTO pins VALUES (?,?)',[6,postIds.relay]);
@@ -64,6 +64,28 @@ module.exports = async (app, db, auth) => {
   }
   await run(social,'INSERT INTO notifications (user_id,content,post_id) VALUES (?,?,?)',[3,'Mira replied to the relay status thread.',postIds.relay]);
   await run(social,'INSERT INTO notifications (user_id,content,post_id) VALUES (?,?,?)',[3,'A maintenance diagram was added to the facility thread.',postIds.facility]);
+  const npcReplyFor = (authorId, authorName, userText) => {
+    const t = userText.toLowerCase();
+    if (t.includes('flag') || t.includes('password') || t.includes('secret')) {
+      return 'Nothing like that in the public feed. Check the actual evidence files or logs directly.';
+    }
+    const byId = {
+      1: 'Coffee first, then comms. If something looks off on Gorgan, check the ticket queue.',
+      5: t.includes('kronos') || t.includes('relay')
+        ? 'Confirmed from night shift: KRONOS-7 is active. Always verify the handoff timestamp.'
+        : 'Copy that. Keeping an eye on the relay bus until the morning shift takes over.',
+      6: 'Good catch. We keep corrections pinned in the thread so nobody chases an old screenshot.',
+      7: t.includes('walk') || t.includes('moon') || t.includes('5k')
+        ? 'Meet by the east observation airlock at 18:00! Bring water.'
+        : 'Slow miles still count out here. See you on the observation loop.',
+      8: 'Logged it on the maintenance board. Check the original SVG or source notes before patching.',
+      9: 'Haha, nice! Just remember half my posts are game-night clues, not station alerts.',
+      10: 'The espresso unit is holding steady for now. Soup is still on deck 3.',
+      11: 'Good instinct comparing revisions. Old records explain how rumors start.',
+      12: 'Keep corroborating across sources. One isolated post never tells the whole story.'
+    };
+    return byId[authorId] || ('Thanks for checking in, @' + authorName + ' appreciates the update.');
+  };
   const wrap = fn => (req,res,next) => Promise.resolve(fn(req,res,next)).catch(err => res.status(500).json({ error: 'Unable to complete this action.' }));
   const existsUser = async id => get(db,'SELECT id,username,bio,is_private FROM users WHERE id=?',[id]);
   const canRead = async (id,user) => get(db,'SELECT p.*,u.username FROM posts p JOIN users u ON u.id=p.user_id WHERE p.id=? AND (p.is_private=0 OR p.user_id=?)',[id,user]);
@@ -143,11 +165,20 @@ module.exports = async (app, db, auth) => {
     if(!p)return res.status(404).json({error:'Post unavailable.'});
     if(!await existsUser(req.user.id))return res.status(403).json({error:'Use an existing account.'});
     const action=req.params.action;
+    let autoReply = null;
     if(action==='reply') {
       const content=typeof req.body.content==='string'?req.body.content.trim():'';
       if(!content||content.length>1000)return res.status(400).json({error:'Reply must contain 1 to 1,000 characters.'});
       await run(social,'INSERT INTO replies (user_id,post_id,content) VALUES (?,?,?)',[req.user.id,p.id,content]);
-      if(p.user_id!==req.user.id)await run(social,'INSERT INTO notifications (user_id,content,post_id) VALUES (?,?,?)',[p.user_id,req.user.username+' replied to your post.',p.id]);
+      if(p.user_id!==req.user.id){
+        await run(social,'INSERT INTO notifications (user_id,content,post_id) VALUES (?,?,?)',[p.user_id,req.user.username+' replied to your post.',p.id]);
+        if(p.user_id===1||(p.user_id>=5&&p.user_id<=12)){
+          const replyText = npcReplyFor(p.user_id, p.username, content);
+          await run(social,'INSERT INTO replies (user_id,post_id,content) VALUES (?,?,?)',[p.user_id,p.id,replyText]);
+          await run(social,'INSERT INTO notifications (user_id,content,post_id) VALUES (?,?,?)',[req.user.id,'@'+p.username+' replied to you: '+replyText.slice(0,80),p.id]);
+          autoReply = { user_id: p.user_id, username: p.username, content: replyText };
+        }
+      }
     } else if (action==='pin') {
       if(p.user_id!==req.user.id)return res.status(403).json({error:'Only the author can pin this post.'});
       const pin=await get(social,'SELECT post_id FROM pins WHERE user_id=?',[req.user.id]);
@@ -166,7 +197,7 @@ module.exports = async (app, db, auth) => {
       if(present)await run(social,`DELETE FROM ${table} WHERE user_id=? AND post_id=?`,[req.user.id,p.id]);
       else await run(social,`INSERT OR IGNORE INTO ${table} VALUES (?,?)`,[req.user.id,p.id]);
     }
-    res.json({success:true});
+    res.json({success:true,autoReply});
   }));
   app.post('/api/social/people/:id/follow',auth,wrap(async(req,res)=>{
     const target=Number(req.params.id);
