@@ -8,3 +8,13 @@ services:
       - ./database.sqlite:/app/database.sqlite
       - ./public:/app/public
     restart: unless-stopped
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_RAW
+      - DAC_OVERRIDE
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    pids_limit: 128
+    cpus: 1.0
