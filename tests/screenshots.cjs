@@ -11,7 +11,7 @@ async function ready(){await page.waitForFunction(()=>!document.querySelector('#
 async function shot(name,title,full=false){await page.screenshot({path:path.join(out,name+'.png'),fullPage:full});entries.push({file:name+'.png',title});}
 async function go(route){await page.goto(base+'/#/'+route);await ready();await page.evaluate(()=>scrollTo(0,0));}
 await page.goto(base+'/login.html');await shot('01 Login','Sign in');await page.getByLabel('Username',{exact:true}).fill('cyber_newbie');await page.getByLabel('Password',{exact:true}).fill('password123');await page.getByRole('button',{name:'Sign in',exact:true}).click();await page.waitForURL(base+'/');await page.locator('article.post').first().waitFor();await ready();await shot('02 Home Feed','Home feed');
-await page.getByRole('button',{name:'Following',exact:true}).click();await ready();await shot('03 Following Feed','Following feed');
+await page.getByRole('button',{name:'Following',exact:true}).first().click();await ready();await shot('03 Following Feed','Following feed');
 await go('explore');await shot('04 Explore People','Explore and community profiles');await page.getByLabel('Search Users',{exact:true}).fill('mira');await page.getByRole('button',{name:'Search users',exact:true}).click();await page.locator('.people-grid').first().getByRole('link',{name:'@mira_ops',exact:true}).waitFor();await shot('05 User Search','User search results');
 await go('explore?q=Maintenance');await shot('06 Topic Search','Maintenance topic search');
 await go('profile/5');await shot('07 Public Profile','Mira public profile');await go('profile/3');await shot('08 Your Profile','Student profile');
